@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Worklog Squad Lyra — PI Plan 2 | Iteração 4 | Copa 2026</title>
+<style>
+  :root {
+    --verde:     #00843D;
+    --verde-esc: #005C2B;
+    --amarelo:   #FFD700;
+    --azul:      #003087;
+    --azul-m:    #0044AA;
+    --branco:    #FFFFFF;
+    --bg:        #0d1f0d;
+    --card:      rgba(255,255,255,0.04);
+    --border:    rgba(255,255,255,0.09);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Segoe UI',Arial,sans-serif; background:var(--bg); color:#e8e8e8; min-height:100vh; }
+
+  /* HEADER */
+  .header {
+    background:linear-gradient(135deg,#004d1a 0%,#002266 45%,#004d1a 100%);
+    padding:44px 24px 36px; text-align:center;
+    border-bottom:4px solid var(--amarelo); position:relative; overflow:hidden;
+  }
+  .header::before {
+    content:''; position:absolute; inset:0;
+    background:repeating-linear-gradient(90deg,transparent,transparent 38px,rgba(255,255,255,0.025) 38px,rgba(255,255,255,0.025) 39px);
+    pointer-events:none;
+  }
+  .copa-tag {
+    display:inline-block; background:var(--amarelo); color:var(--azul);
+    font-size:11px; font-weight:800; padding:4px 14px; border-radius:20px;
+    letter-spacing:2.5px; text-transform:uppercase; margin-bottom:10px;
+  }
+  .em-andamento {
+    display:inline-block; background:rgba(39,174,96,0.25); color:#2ecc71;
+    border:1px solid rgba(39,174,96,0.4);
+    font-size:11px; font-weight:700; padding:4px 14px; border-radius:20px;
+    letter-spacing:1.5px; margin-left:10px;
+  }
+  .header h1 { font-size:2.6em; font-weight:800; color:var(--amarelo); text-shadow:0 2px 12px rgba(0,0,0,0.6); margin-bottom:8px; }
+  .header .sub  { font-size:1.15em; color:rgba(255,255,255,0.80); margin-bottom:5px; }
+  .header .meta { font-size:0.88em; color:rgba(255,255,255,0.50); margin-top:4px; }
+  .trophy { font-size:3em; margin:6px 0; }
+
+  /* CONTAINER */
+  .wrap { max-width:1020px; margin:0 auto; padding:28px 20px 60px; }
+
+  /* SECTION */
+  .section { margin:36px 0; }
+  .sec-title {
+    display:flex; align-items:center; gap:10px;
+    font-size:1.2em; font-weight:700; color:var(--amarelo);
+    padding-bottom:10px; border-bottom:2px solid var(--verde-esc); margin-bottom:18px;
+  }
+
+  /* BANNER SPRINT EM ANDAMENTO */
+  .banner-andamento {
+    background:linear-gradient(90deg,rgba(39,174,96,0.12),rgba(39,174,96,0.04));
+    border:1px solid rgba(39,174,96,0.3); border-radius:12px;
+    padding:14px 20px; margin-bottom:24px;
+    display:flex; align-items:center; gap:14px; font-size:0.88em;
+  }
+  .banner-andamento .icon { font-size:1.6em; }
+  .banner-andamento strong { color:#2ecc71; }
+
+  /* KPI CARDS */
+  .kpi-row { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:22px; }
+  .kpi { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:18px; text-align:center; }
+  .kpi .val { font-size:2.1em; font-weight:800; color:var(--amarelo); }
+  .kpi .lbl { font-size:0.78em; color:rgba(255,255,255,0.5); margin-top:5px; }
+
+  /* CAPACITY TABLE */
+  .cap-table { width:100%; border-collapse:collapse; border-radius:12px; overflow:hidden; }
+  .cap-table th { background:rgba(0,34,102,0.6); color:var(--amarelo); padding:11px 12px; font-size:0.78em; text-transform:uppercase; letter-spacing:1px; text-align:left; }
+  .cap-table td { padding:10px 12px; border-bottom:1px solid rgba(255,255,255,0.05); font-size:0.88em; vertical-align:middle; }
+  .cap-table tr:hover { background:rgba(255,215,0,0.04); }
+  .bar-wrap { background:rgba(255,255,255,0.10); border-radius:4px; height:7px; margin-bottom:3px; }
+  .bar      { height:7px; border-radius:4px; }
+  .pct      { font-size:0.75em; color:rgba(255,255,255,0.45); }
+  .pos { color:#2ecc71; } .neg { color:#e74c3c; }
+  .badge { display:inline-block; padding:2px 8px; border-radius:10px; font-size:0.73em; font-weight:700; white-space:nowrap; }
+  .b-red    { background:rgba(192,57,43,0.25);  color:#e74c3c; border:1px solid rgba(231,76,60,0.3); }
+  .b-yellow { background:rgba(241,196,15,0.18); color:#f1c40f; border:1px solid rgba(241,196,15,0.3); }
+  .b-green  { background:rgba(39,174,96,0.20);  color:#2ecc71; border:1px solid rgba(46,204,113,0.3); }
+  .b-gray   { background:rgba(255,255,255,0.08); color:rgba(255,255,255,0.5); border:1px solid rgba(255,255,255,0.12); }
+  .b-blue   { background:rgba(52,152,219,0.18); color:#3498db; border:1px solid rgba(52,152,219,0.3); }
+
+  /* RANKING */
+  .rank-list { display:grid; gap:11px; }
+  .rank-card { background:var(--card); border:1px solid var(--border); border-radius:13px; padding:14px 18px; display:flex; align-items:center; gap:16px; transition:transform .15s; }
+  .rank-card:hover { transform:translateX(5px); }
+  .rank-card.g1 { background:linear-gradient(90deg,rgba(255,215,0,0.12),var(--card)); border-color:rgba(255,215,0,0.35); }
+  .rank-card.g2 { background:linear-gradient(90deg,rgba(192,192,192,0.10),var(--card)); border-color:rgba(192,192,192,0.25); }
+  .rank-card.g3 { background:linear-gradient(90deg,rgba(205,127,50,0.10),var(--card)); border-color:rgba(205,127,50,0.25); }
+  .rank-icon { font-size:2.1em; min-width:48px; text-align:center; }
+  .rank-info { flex:1; }
+  .rank-name { font-size:1.05em; font-weight:700; margin-bottom:3px; }
+  .rank-sub  { font-size:0.78em; color:rgba(255,255,255,0.5); }
+  .rank-bar  { width:180px; }
+  .rank-h    { font-size:1.35em; font-weight:800; min-width:72px; text-align:right; }
+
+  /* BUILD vs BURN */
+  .bb-summary { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:20px; }
+  .bb-kpi { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:14px; text-align:center; }
+  .bb-kpi .val { font-size:1.7em; font-weight:800; }
+  .bb-kpi .lbl { font-size:0.72em; color:rgba(255,255,255,0.45); margin-top:5px; }
+  .bb-kpi.burn     { border-color:rgba(231,76,60,0.35); }
+  .bb-kpi.burn .val { color:#e74c3c; }
+  .bb-kpi.build    { border-color:rgba(52,152,219,0.35); }
+  .bb-kpi.build .val { color:#3498db; }
+  .bb-kpi.allwork  { border-color:rgba(155,89,182,0.35); }
+  .bb-kpi.allwork .val { color:#9b59b6; }
+  .bb-kpi.outro    { border-color:rgba(255,255,255,0.15); }
+  .bb-kpi.outro .val { color:rgba(255,255,255,0.45); }
+
+  .bb-squad-bar { margin-bottom:22px; }
+  .bb-squad-bar .label { font-size:0.8em; color:rgba(255,255,255,0.45); margin-bottom:7px; }
+  .stacked { display:flex; border-radius:6px; overflow:hidden; height:22px; }
+  .stacked .seg { display:flex; align-items:center; justify-content:center; font-size:0.72em; font-weight:700; white-space:nowrap; overflow:hidden; }
+  .seg-burn     { background:#c0392b; color:#fff; }
+  .seg-build    { background:#2980b9; color:#fff; }
+  .seg-allwork  { background:#8e44ad; color:#fff; }
+  .seg-other    { background:rgba(255,255,255,0.18); color:rgba(255,255,255,0.7); }
+
+  .bb-table { width:100%; border-collapse:collapse; border-radius:12px; overflow:hidden; }
+  .bb-table th { background:rgba(0,34,102,0.5); color:var(--amarelo); padding:10px 12px; font-size:0.76em; text-transform:uppercase; letter-spacing:1px; text-align:left; }
+  .bb-table th.r { text-align:right; }
+  .bb-table td { padding:9px 12px; border-bottom:1px solid rgba(255,255,255,0.05); font-size:0.86em; vertical-align:middle; }
+  .bb-table td.r { text-align:right; }
+  .bb-table tr:hover { background:rgba(255,215,0,0.03); }
+  .mini-stacked { display:flex; border-radius:3px; overflow:hidden; height:8px; margin-top:3px; }
+  .h-burn     { color:#e74c3c; font-weight:700; }
+  .h-build    { color:#3498db; font-weight:700; }
+  .h-allwork  { color:#9b59b6; font-weight:700; }
+  .h-other    { color:rgba(255,255,255,0.4); }
+
+  /* HEATMAP */
+  .legend { display:flex; gap:18px; flex-wrap:wrap; margin-bottom:12px; font-size:0.78em; }
+  .leg-i  { display:flex; align-items:center; gap:6px; }
+  .leg-dot{ width:12px; height:12px; border-radius:3px; }
+  .heat-wrap { overflow-x:auto; }
+  .heat-tbl  { width:100%; border-collapse:collapse; min-width:680px; }
+  .heat-tbl th { background:rgba(0,34,102,0.4); color:var(--amarelo); padding:9px 6px; font-size:0.73em; text-align:center; }
+  .heat-tbl td { padding:8px 6px; text-align:center; font-size:0.82em; }
+  .heat-tbl td.dn { text-align:left; padding-left:14px; font-weight:600; white-space:nowrap; }
+  .c-ok      { background:rgba(39,174,96,0.35);   color:#2ecc71; border-radius:5px; }
+  .c-parc    { background:rgba(230,126,34,0.30);   color:#e67e22; border-radius:5px; }
+  .c-susp    { background:rgba(241,196,15,0.22);   color:#f1c40f; border-radius:5px; }
+  .c-aus     { background:rgba(192,57,43,0.30);    color:#e74c3c; border-radius:5px; }
+  .c-fut     { background:rgba(255,255,255,0.04);  color:rgba(255,255,255,0.2); border-radius:5px; font-size:0.75em; }
+
+  /* INSIGHTS */
+  .ins-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .ins-card { background:var(--card); border-left:4px solid var(--amarelo); border-radius:0 12px 12px 0; padding:15px 16px; }
+  .ins-card.warn { border-left-color:#e74c3c; }
+  .ins-card.ok   { border-left-color:#2ecc71; }
+  .ins-card.info { border-left-color:#3498db; }
+  .ins-title { font-size:0.73em; text-transform:uppercase; letter-spacing:1px; color:rgba(255,255,255,0.45); margin-bottom:8px; }
+  .ins-body  { font-size:0.87em; line-height:1.55; }
+
+  /* ACTIONS */
+  .act-list { list-style:none; display:grid; gap:10px; }
+  .act-list li { background:rgba(0,34,102,0.25); border:1px solid rgba(255,215,0,0.10); border-radius:10px; padding:12px 16px; display:flex; align-items:flex-start; gap:10px; font-size:0.88em; line-height:1.5; }
+  .act-icon { font-size:1.2em; flex-shrink:0; margin-top:1px; }
+
+  /* FOOTER */
+  .footer { text-align:center; padding:30px 20px; color:rgba(255,255,255,0.25); font-size:0.78em; border-top:1px solid rgba(255,255,255,0.08); }
+
+  @media (max-width:640px) {
+    .kpi-row { grid-template-columns:1fr 1fr; }
+    .bb-summary { grid-template-columns:1fr 1fr; }
+    .ins-grid { grid-template-columns:1fr; }
+    .rank-bar { display:none; }
+    .header h1 { font-size:1.8em; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div>
+    <span class="copa-tag">⚽ Copa do Mundo 2026 Edition</span>
+    <span class="em-andamento">🟢 Sprint em andamento</span>
+  </div>
+  <div class="trophy">🏆</div>
+  <h1>Relatório de Worklogs</h1>
+  <div class="sub">Squad Lyra &nbsp;·&nbsp; PI Plan 2 — Iteração 4</div>
+  <div class="meta">Período: 22/06 a 03/07/2026 &nbsp;|&nbsp; 10 dias úteis &nbsp;|&nbsp; Capacidade: 80h / dev</div>
+  <div class="meta" style="margin-top:5px;">Dados coletados em 24/06/2026 &nbsp;|&nbsp; 2 dias úteis transcorridos</div>
+</div>
+
+<div class="wrap">
+
+  <!-- BANNER -->
+  <div class="banner-andamento">
+    <span class="icon">📅</span>
+    <span>
+      <strong>Sprint parcial — 2 de 10 dias úteis transcorridos (22 e 23/jun).</strong>
+      Os dados de capacidade e deltas são calculados sobre os <strong>2 dias</strong> registrados (ref. 16h/dev).
+      Atualize coletando novamente à medida que a sprint avança.
+    </span>
+  </div>
+
+  <!-- KPIs -->
+  <div class="section">
+    <div class="sec-title">📊 Visão Geral — 2 dias transcorridos</div>
+    <div class="kpi-row">
+      <div class="kpi">
+        <div class="val">74.03h</div>
+        <div class="lbl">Total Lançado pelo Time</div>
+      </div>
+      <div class="kpi">
+        <div class="val">96h</div>
+        <div class="lbl">Capacidade Esperada (2 dias × 8h × 6 devs)</div>
+      </div>
+      <div class="kpi">
+        <div class="val" style="color:#f1c40f;">77.1%</div>
+        <div class="lbl">Aproveitamento do Período Transcorrido</div>
+      </div>
+    </div>
+
+    <table class="cap-table">
+      <thead>
+        <tr>
+          <th>Dev</th>
+          <th>Lançado</th>
+          <th>Utilização (vs 16h)</th>
+          <th>Delta vs 16h</th>
+          <th>Worklogs</th>
+          <th>Dias c/ reg.</th>
+          <th>Alerta</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Ederson Junior</strong></td>
+          <td><strong>15.00h</strong></td>
+          <td>
+            <div class="bar-wrap"><div class="bar" style="width:93.8%;background:#27ae60;"></div></div>
+            <span class="pct">93.8%</span>
+          </td>
+          <td class="neg">-1.00h</td>
+          <td>6</td>
+          <td>2 / 10</td>
+          <td><span class="badge b-yellow">1× 8h exatas</span></td>
+        </tr>
+        <tr>
+          <td><strong>Guilherme Henrique</strong></td>
+          <td>14.87h</td>
+          <td>
+            <div class="bar-wrap"><div class="bar" style="width:92.9%;background:#27ae60;"></div></div>
+            <span class="pct">92.9%</span>
+          </td>
+          <td class="neg">-1.13h</td>
+          <td>13</td>
+          <td>2 / 10</td>
+          <td><span class="badge b-green">OK</span></td>
+        </tr>
+        <tr>
+          <td><strong>Alex Angelim</strong></td>
+          <td>13.17h</td>
+          <td>
+            <div class="bar-wrap"><div class="bar" style="width:82.3%;background:#27ae60;"></div></div>
+            <span class="pct">82.3%</span>
+          </td>
+          <td class="neg">-2.83h</td>
+          <td>15</td>
+          <td>2 / 10</td>
+          <td><span class="badge b-green">OK</span></td>
+        </tr>
+        <tr>
+          <td><strong>Renan Gomes</strong></td>
+          <td>12.75h</td>
+          <td>
+            <div class="bar-wrap"><div class="bar" style="width:79.7%;background:#f39c12;"></div></div>
+            <span class="pct">79.7%</span>
+          </td>
+          <td class="neg">-3.25h</td>
+          <td>11</td>
+          <td>2 / 10</td>
+          <td><span class="badge b-yellow">Levemente abaixo</span></td>
+        </tr>
+        <tr>
+          <td><strong>Lucas Cunha</strong></td>
+          <td>10.25h</td>
+          <td>
+            <div class="bar-wrap"><div class="bar" style="width:64.1%;background:#e74c3c;"></div></div>
+            <span class="pct">64.1%</span>
+          </td>
+          <td class="neg">-5.75h</td>
+          <td>8</td>
+          <td>2 / 10</td>
+          <td><span class="badge b-red">Abaixo</span></td>
+        </tr>
+        <tr>
+          <td><strong>Arthur Henrique</strong></td>
+          <td>8.00h</td>
+          <td>
+            <div class="bar-wrap"><div class="bar" style="width:50%;background:#c0392b;"></div></div>
+            <span class="pct">50.0%</span>
+          </td>
+          <td class="neg">-8.00h</td>
+          <td>10</td>
+          <td>2 / 10</td>
+          <td><span class="badge b-red">Abaixo</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- RANKING -->
+  <div class="section">
+    <div class="sec-title">🏟️ Placar Parcial — 2 dias</div>
+    <div class="rank-list">
+
+      <div class="rank-card g1">
+        <div class="rank-icon">🥇</div>
+        <div class="rank-info">
+          <div class="rank-name">Ederson Junior</div>
+          <div class="rank-sub">15.00h · 6 worklogs · 93.8% da cap de 2 dias</div>
+        </div>
+        <div class="rank-bar">
+          <div class="bar-wrap"><div class="bar" style="width:100%;background:#FFD700;"></div></div>
+        </div>
+        <div class="rank-h" style="color:#FFD700;">15.00h</div>
+      </div>
+
+      <div class="rank-card g2">
+        <div class="rank-icon">🥈</div>
+        <div class="rank-info">
+          <div class="rank-name">Guilherme Henrique</div>
+          <div class="rank-sub">14.87h · 13 worklogs · melhor granularidade</div>
+        </div>
+        <div class="rank-bar">
+          <div class="bar-wrap"><div class="bar" style="width:99.1%;background:#C0C0C0;"></div></div>
+        </div>
+        <div class="rank-h" style="color:#C0C0C0;">14.87h</div>
+      </div>
+
+      <div class="rank-card g3">
+        <div class="rank-icon">🥉</div>
+        <div class="rank-info">
+          <div class="rank-name">Alex Angelim</div>
+          <div class="rank-sub">13.17h · 15 worklogs · 36.1% em overhead CI&T</div>
+        </div>
+        <div class="rank-bar">
+          <div class="bar-wrap"><div class="bar" style="width:87.8%;background:#CD7F32;"></div></div>
+        </div>
+        <div class="rank-h" style="color:#CD7F32;">13.17h</div>
+      </div>
+
+      <div class="rank-card">
+        <div class="rank-icon">4️⃣</div>
+        <div class="rank-info">
+          <div class="rank-name">Renan Gomes</div>
+          <div class="rank-sub">12.75h · 11 worklogs · 43.1% em refinamento técnico</div>
+        </div>
+        <div class="rank-bar">
+          <div class="bar-wrap"><div class="bar" style="width:85%;background:#e67e22;"></div></div>
+        </div>
+        <div class="rank-h" style="color:#e67e22;">12.75h</div>
+      </div>
+
+      <div class="rank-card">
+        <div class="rank-icon">5️⃣</div>
+        <div class="rank-info">
+          <div class="rank-name">Lucas Cunha</div>
+          <div class="rank-sub">10.25h · 8 worklogs · dias parciais nos 2 dias</div>
+        </div>
+        <div class="rank-bar">
+          <div class="bar-wrap"><div class="bar" style="width:68.3%;background:#e74c3c;"></div></div>
+        </div>
+        <div class="rank-h" style="color:#e74c3c;">10.25h</div>
+      </div>
+
+      <div class="rank-card">
+        <div class="rank-icon">6️⃣</div>
+        <div class="rank-info">
+          <div class="rank-name">Arthur Henrique</div>
+          <div class="rank-sub">8.00h · 10 worklogs · dias parciais nos 2 dias</div>
+        </div>
+        <div class="rank-bar">
+          <div class="bar-wrap"><div class="bar" style="width:53.3%;background:#c0392b;"></div></div>
+        </div>
+        <div class="rank-h" style="color:#c0392b;">8.00h</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- BURN vs BUILD -->
+  <div class="section">
+    <div class="sec-title">⚙️ Burn vs Build — Composição das Horas</div>
+
+    <div class="bb-summary">
+      <div class="bb-kpi burn">
+        <div class="val">58.78h</div>
+        <div class="lbl">🔥 Burn<br>(Desenvolvimento)<br><small>79.4%</small></div>
+      </div>
+      <div class="bb-kpi build">
+        <div class="val">6.50h</div>
+        <div class="lbl">🏗️ Build<br>(Requisitos & Rituais)<br><small>8.8%</small></div>
+      </div>
+      <div class="bb-kpi allwork">
+        <div class="val">4.75h</div>
+        <div class="lbl">⚙️ All Work<br>(Overhead CI&T)<br><small>6.4%</small></div>
+      </div>
+      <div class="bb-kpi outro">
+        <div class="val">4.00h</div>
+        <div class="lbl">📦 Outro<br>(Não classificado)<br><small>5.4%</small></div>
+      </div>
+    </div>
+
+    <div class="bb-squad-bar">
+      <div class="label">Distribuição do time — 74.03h totais</div>
+      <div class="stacked">
+        <div class="seg seg-burn"    style="width:79.4%;">79% Burn</div>
+        <div class="seg seg-build"   style="width:8.8%;">9%</div>
+        <div class="seg seg-allwork" style="width:6.4%;">6%</div>
+        <div class="seg seg-other"   style="width:5.4%;">5%</div>
+      </div>
+    </div>
+
+    <table class="bb-table">
+      <thead>
+        <tr>
+          <th>Dev</th>
+          <th class="r">🔥 Burn</th>
+          <th class="r">🏗️ Build</th>
+          <th class="r">⚙️ All Work</th>
+          <th class="r">📦 Outro</th>
+          <th class="r">Total</th>
+          <th style="min-width:130px;">Distribuição</th>
+          <th>Observação</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Ederson Junior</strong></td>
+          <td class="r h-burn">11.00h</td>
+          <td class="r h-build">0.00h</td>
+          <td class="r h-allwork">0.00h</td>
+          <td class="r h-other">4.00h</td>
+          <td class="r">15.00h</td>
+          <td>
+            <div class="mini-stacked">
+              <div class="seg-burn"    style="width:73.3%;"></div>
+              <div class="seg-other"   style="width:26.7%;"></div>
+            </div>
+          </td>
+          <td><span class="badge b-yellow">POC (Tarefa) 26.7%</span></td>
+        </tr>
+        <tr>
+          <td><strong>Guilherme Henrique</strong></td>
+          <td class="r h-burn">14.37h</td>
+          <td class="r h-build">0.50h</td>
+          <td class="r h-allwork">0.00h</td>
+          <td class="r h-other">0.00h</td>
+          <td class="r">14.87h</td>
+          <td>
+            <div class="mini-stacked">
+              <div class="seg-burn"  style="width:96.6%;"></div>
+              <div class="seg-build" style="width:3.4%;"></div>
+            </div>
+          </td>
+          <td><span class="badge b-green">96.6% Burn ⭐</span></td>
+        </tr>
+        <tr>
+          <td><strong>Alex Angelim</strong></td>
+          <td class="r h-burn">8.42h</td>
+          <td class="r h-build">0.00h</td>
+          <td class="r h-allwork">4.75h</td>
+          <td class="r h-other">0.00h</td>
+          <td class="r">13.17h</td>
+          <td>
+            <div class="mini-stacked">
+              <div class="seg-burn"    style="width:63.9%;"></div>
+              <div class="seg-allwork" style="width:36.1%;"></div>
+            </div>
+          </td>
+          <td><span class="badge b-yellow">Overhead 36.1% ⚠️</span></td>
+        </tr>
+        <tr>
+          <td><strong>Renan Gomes</strong></td>
+          <td class="r h-burn">7.25h</td>
+          <td class="r h-build">5.50h</td>
+          <td class="r h-allwork">0.00h</td>
+          <td class="r h-other">0.00h</td>
+          <td class="r">12.75h</td>
+          <td>
+            <div class="mini-stacked">
+              <div class="seg-burn"  style="width:56.9%;"></div>
+              <div class="seg-build" style="width:43.1%;"></div>
+            </div>
+          </td>
+          <td><span class="badge b-blue">Build 43.1% (refinamento)</span></td>
+        </tr>
+        <tr>
+          <td><strong>Lucas Cunha</strong></td>
+          <td class="r h-burn">9.75h</td>
+          <td class="r h-build">0.50h</td>
+          <td class="r h-allwork">0.00h</td>
+          <td class="r h-other">0.00h</td>
+          <td class="r">10.25h</td>
+          <td>
+            <div class="mini-stacked">
+              <div class="seg-burn"  style="width:95.1%;"></div>
+              <div class="seg-build" style="width:4.9%;"></div>
+            </div>
+          </td>
+          <td><span class="badge b-green">95.1% Burn</span></td>
+        </tr>
+        <tr>
+          <td><strong>Arthur Henrique</strong></td>
+          <td class="r h-burn">8.00h</td>
+          <td class="r h-build">0.00h</td>
+          <td class="r h-allwork">0.00h</td>
+          <td class="r h-other">0.00h</td>
+          <td class="r">8.00h</td>
+          <td>
+            <div class="mini-stacked">
+              <div class="seg-burn" style="width:100%;"></div>
+            </div>
+          </td>
+          <td><span class="badge b-green">100% Burn</span></td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr style="background:rgba(255,215,0,0.06);font-weight:700;">
+          <td><strong>Squad</strong></td>
+          <td class="r h-burn">58.78h</td>
+          <td class="r h-build">6.50h</td>
+          <td class="r h-allwork">4.75h</td>
+          <td class="r h-other">4.00h</td>
+          <td class="r">74.03h</td>
+          <td>
+            <div class="mini-stacked">
+              <div class="seg-burn"    style="width:79.4%;"></div>
+              <div class="seg-build"   style="width:8.8%;"></div>
+              <div class="seg-allwork" style="width:6.4%;"></div>
+              <div class="seg-other"   style="width:5.4%;"></div>
+            </div>
+          </td>
+          <td><span class="badge b-green">79.4% Burn ✓</span></td>
+        </tr>
+      </tfoot>
+    </table>
+    <p style="font-size:0.74em;color:rgba(255,255,255,0.3);margin-top:10px;">
+      🔥 Burn: Sub-Imp, Sub-Test, Sub-Bug, Sub-A&amp;D, Sub-Block, Daily and Alignments &nbsp;|&nbsp;
+      🏗️ Build: Sub-Rituals, Tech Solution, Training, Sub-Requirements &nbsp;|&nbsp;
+      ⚙️ All Work: Overhead CI&amp;T, Value Activation
+    </p>
+  </div>
+
+  <!-- HEATMAP -->
+  <div class="section">
+    <div class="sec-title">📅 Presença Diária — Mapa de Calor</div>
+    <div class="legend">
+      <div class="leg-i"><div class="leg-dot" style="background:rgba(39,174,96,0.55);"></div>OK (≥6h)</div>
+      <div class="leg-i"><div class="leg-dot" style="background:rgba(230,126,34,0.55);"></div>Parcial (&lt;6h)</div>
+      <div class="leg-i"><div class="leg-dot" style="background:rgba(241,196,15,0.40);"></div>Suspeito (8h exatas)</div>
+      <div class="leg-i"><div class="leg-dot" style="background:rgba(192,57,43,0.55);"></div>Ausente</div>
+      <div class="leg-i"><div class="leg-dot" style="background:rgba(255,255,255,0.07);"></div>Futuro</div>
+    </div>
+    <div class="heat-wrap">
+      <table class="heat-tbl">
+        <thead>
+          <tr>
+            <th style="text-align:left;">Dev</th>
+            <th>22/06<br><small>Seg</small></th>
+            <th>23/06<br><small>Ter</small></th>
+            <th>24/06<br><small>Qua</small></th>
+            <th>25/06<br><small>Qui</small></th>
+            <th>26/06<br><small>Sex</small></th>
+            <th>29/06<br><small>Seg</small></th>
+            <th>30/06<br><small>Ter</small></th>
+            <th>01/07<br><small>Qua</small></th>
+            <th>02/07<br><small>Qui</small></th>
+            <th>03/07<br><small>Sex</small></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="dn">Alex Angelim</td>
+            <td class="c-ok">✓</td><td class="c-ok">✓</td>
+            <td class="c-fut">—</td><td class="c-fut">—</td><td class="c-fut">—</td>
+            <td class="c-fut">—</td><td class="c-fut">—</td><td class="c-fut">—</td>
+            <td class="c-fut">—</td><td class="c-fut">—</td>
+          </tr>
+          <tr>
+            <td class="dn">Arthur Henrique</td>
+            <td class="c-parc">~</td><td class="c-parc">~</td>
+            <td class="c-fut">—</td><td class="c-fut">—</td><td class="c-fut">—</td>
+            <td class="c-fut">—</td><td class="c-fut">—</td><td class="c-fut">—</td>
+            <td class="c-fut">—</td><td class="c-fut">—</td>
+          </tr>
+          <tr>
+            <td class="dn">Ederson Junior</td>
+            <td class="c-ok">✓</td><td class="c-susp">8h</td>
+            <td class="c-fut">—</td><td class="c-fut">—</td><td class="c-fut">—</td>
+            <td class="c-fut">—</td><td class="c-fut">—</td><td class="c-fut">—</td>
+            <td class="c-fut">—</td><td class="c-fut">—</td>
+          </tr>
+          <tr>
+            <td class="dn">Guilherme Henrique</td>
+            <td class="c-ok">✓</td><td class="c-ok">✓</td>
+            <td class="c-fut">—</td><td class="c-fut">—</td><td class="c-fut">—</td>
+            <td class="c-fut">—</td><td class="c-fut">—</td><td class="c-fut">—</td>
+            <td class="c-fut">—</td><td class="c-fut">—</td>
+          </tr>
+          <tr>
+            <td class="dn">Lucas Cunha</td>
+            <td class="c-ok">✓</td><td class="c-parc">~</td>
+            <td class="c-fut">—</td><td class="c-fut">—</td><td class="c-fut">—</td>
+            <td class="c-fut">—</td><td class="c-fut">—</td><td class="c-fut">—</td>
+            <td class="c-fut">—</td><td class="c-fut">—</td>
+          </tr>
+          <tr>
+            <td class="dn">Renan Gomes</td>
+            <td class="c-ok">✓</td><td class="c-parc">~</td>
+            <td class="c-fut">—</td><td class="c-fut">—</td><td class="c-fut">—</td>
+            <td class="c-fut">—</td><td class="c-fut">—</td><td class="c-fut">—</td>
+            <td class="c-fut">—</td><td class="c-fut">—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- INSIGHTS -->
+  <div class="section">
+    <div class="sec-title">💡 Insights — Snapshot dos 2 primeiros dias</div>
+    <div class="ins-grid">
+
+      <div class="ins-card ok">
+        <div class="ins-title">⭐ Foco em Desenvolvimento</div>
+        <div class="ins-body">
+          Squad com <strong>79.4% das horas em BURN</strong> nos 2 primeiros dias — ótimo sinal de foco em entrega.
+          <strong>Guilherme</strong> (96.6%) e <strong>Lucas</strong> (95.1%) se destacam pela concentração em desenvolvimento.
+        </div>
+      </div>
+
+      <div class="ins-card info">
+        <div class="ins-title">🏗️ Renan — Build no início da sprint</div>
+        <div class="ins-body">
+          43.1% das horas de Renan foram em <strong>Refinamento Técnico e Planning</strong> (Build).
+          Esperado no início de sprint — acompanhar se o percentual de Burn aumenta nas próximas semanas.
+        </div>
+      </div>
+
+      <div class="ins-card warn">
+        <div class="ins-title">⚙️ Alex — Overhead CI&T elevado</div>
+        <div class="ins-body">
+          <strong>36.1% (4.75h)</strong> das horas de Alex foram em Overhead CI&T (processos internos).
+          Verificar se é pontual (onboarding, compliance) ou padrão recorrente.
+        </div>
+      </div>
+
+      <div class="ins-card warn">
+        <div class="ins-title">📦 Ederson — POC não classificada</div>
+        <div class="ins-body">
+          <strong>4h (26.7%)</strong> lançadas em <em>Tarefa</em> — POC de integração com PowerAutomate.
+          Issue VHPH-2868 cai como "Outro" por ser do tipo Tarefa. Verificar se deve ser reclassificada.
+        </div>
+      </div>
+
+      <div class="ins-card">
+        <div class="ins-title">📊 Arthur e Lucas — Dias parciais</div>
+        <div class="ins-body">
+          Ambos com dias parciais nos 2 dias. Arthur com 8h total (4h/dia), Lucas com 10.25h.
+          Ainda cedo para concluir — acompanhar evolução nos próximos dias.
+        </div>
+      </div>
+
+      <div class="ins-card">
+        <div class="ins-title">🔍 Ederson — 8h exatas no dia 23</div>
+        <div class="ins-body">
+          Lançamento de <strong>8h exatas</strong> em 23/06 com apenas 3 worklogs no dia.
+          Baixa granularidade — pode ser lançamento retroativo. Sem alarme por enquanto.
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- AÇÕES -->
+  <div class="section">
+    <div class="sec-title">🎯 Pontos de Atenção para a Sprint</div>
+    <ul class="act-list">
+      <li>
+        <span class="act-icon">📈</span>
+        <span><strong>Acompanhar ritmo diário:</strong> com 2/10 dias, é cedo para conclusões — coletar dados novamente ao longo da sprint para acompanhar evolução da capacidade e do %Burn.</span>
+      </li>
+      <li>
+        <span class="act-icon">⚙️</span>
+        <span><strong>Overhead de Alex:</strong> 36.1% em Overhead CI&T nos primeiros dias. Verificar na daily se é algo pontual ou se está tomando espaço recorrente da sprint.</span>
+      </li>
+      <li>
+        <span class="act-icon">🏗️</span>
+        <span><strong>Renan em refinamento:</strong> 43.1% em Build (Refinamento Técnico) no início é normal. Monitorar se o Burn aumenta conforme as histórias avançam.</span>
+      </li>
+      <li>
+        <span class="act-icon">📦</span>
+        <span><strong>Reclassificar VHPH-2868 (POC):</strong> a Tarefa de POC Power Automate caiu como "Outro". Avaliar se deve ser um tipo de issue diferente para melhor rastreabilidade futura.</span>
+      </li>
+      <li>
+        <span class="act-icon">🎯</span>
+        <span><strong>Meta de Burn:</strong> manter acima de 70% ao longo da sprint. Com 79.4% nos 2 primeiros dias, o time está bem posicionado — sustentar o foco em desenvolvimento.</span>
+      </li>
+    </ul>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  ⚽ Squad Lyra &nbsp;|&nbsp; Hub de Pagamentos Vivo &nbsp;|&nbsp; PI Plan 2 — Iteração 4<br>
+  <span style="margin-top:5px;display:inline-block;">
+    Copa do Mundo 2026 Edition &nbsp;·&nbsp; Dados: Tempo API + Jira API (22–23/06/2026) &nbsp;·&nbsp; Gerado em 24/06/2026
+  </span>
+</div>
+
+</body>
+</html>

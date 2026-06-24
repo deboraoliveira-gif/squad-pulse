@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Worklog Squad Lyra — Iteração 6 | Copa 2026</title>
+<style>
+  :root {
+    --verde:     #00843D;
+    --verde-esc: #005C2B;
+    --amarelo:   #FFD700;
+    --azul:      #003087;
+    --azul-m:    #0044AA;
+    --branco:    #FFFFFF;
+    --ok:        #27ae60;
+    --parcial:   #e67e22;
+    --suspeito:  #f1c40f;
+    --ausente:   #c0392b;
+    --bg:        #0d1f0d;
+    --card:      rgba(255,255,255,0.04);
+    --border:    rgba(255,255,255,0.09);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: var(--bg);
+    color: #e8e8e8;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ─────────────────────────────────────────── */
+  .header {
+    background: linear-gradient(135deg, #004d1a 0%, #002266 45%, #004d1a 100%);
+    padding: 44px 24px 36px;
+    text-align: center;
+    border-bottom: 4px solid var(--amarelo);
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content:'';
+    position:absolute; inset:0;
+    background: repeating-linear-gradient(90deg,
+      transparent, transparent 38px,
+      rgba(255,255,255,0.025) 38px, rgba(255,255,255,0.025) 39px);
+    pointer-events:none;
+  }
+  .copa-tag {
+    display:inline-block;
+    background: var(--amarelo);
+    color: var(--azul);
+    font-size:11px; font-weight:800;
+    padding: 4px 14px; border-radius:20px;
+    letter-spacing:2.5px; text-transform:uppercase;
+    margin-bottom:14px;
+  }
+  .header h1 {
+    font-size:2.6em; font-weight:800;
+    color: var(--amarelo);
+    text-shadow: 0 2px 12px rgba(0,0,0,0.6);
+    margin-bottom:8px;
+  }
+  .header .sub  { font-size:1.15em; color:rgba(255,255,255,0.80); margin-bottom:5px; }
+  .header .meta { font-size:0.88em; color:rgba(255,255,255,0.50); margin-top:4px; }
+  .trophy { font-size:3em; margin:6px 0; }
+
+  /* ── CONTAINER ───────────────────────────────────────── */
+  .wrap { max-width:1020px; margin:0 auto; padding:28px 20px 60px; }
+
+  /* ── SECTION ─────────────────────────────────────────── */
+  .section { margin: 36px 0; }
+  .sec-title {
+    display:flex; align-items:center; gap:10px;
+    font-size:1.2em; font-weight:700;
+    color: var(--amarelo);
+    padding-bottom:10px;
+    border-bottom: 2px solid var(--verde-esc);
+    margin-bottom:18px;
+  }
+
+  /* ── KPI CARDS ───────────────────────────────────────── */
+  .kpi-row { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:22px; }
+  .kpi {
+    background: var(--card);
+    border:1px solid var(--border);
+    border-radius:14px; padding:18px;
+    text-align:center;
+  }
+  .kpi .val { font-size:2.1em; font-weight:800; color: var(--amarelo); }
+  .kpi .lbl { font-size:0.78em; color:rgba(255,255,255,0.5); margin-top:5px; }
+
+  /* ── CAPACITY TABLE ──────────────────────────────────── */
+  .cap-table { width:100%; border-collapse:collapse; border-radius:12px; overflow:hidden; }
+  .cap-table th {
+    background: rgba(0,34,102,0.6);
+    color: var(--amarelo);
+    padding:11px 12px; font-size:0.78em;
+    text-transform:uppercase; letter-spacing:1px;
+    text-align:left;
+  }
+  .cap-table td { padding:10px 12px; border-bottom:1px solid rgba(255,255,255,0.05); font-size:0.88em; vertical-align:middle; }
+  .cap-table tr:hover { background:rgba(255,215,0,0.04); }
+
+  .bar-wrap { background:rgba(255,255,255,0.10); border-radius:4px; height:7px; margin-bottom:3px; }
+  .bar      { height:7px; border-radius:4px; }
+
+  .pct      { font-size:0.75em; color:rgba(255,255,255,0.45); }
+  .pos { color:#2ecc71; } .neg { color:#e74c3c; } .neu { color:#f39c12; }
+
+  .badge {
+    display:inline-block; padding:2px 8px; border-radius:10px;
+    font-size:0.73em; font-weight:700; white-space:nowrap;
+  }
+  .b-red    { background:rgba(192,57,43,0.25);  color:#e74c3c; border:1px solid rgba(231,76,60,0.3); }
+  .b-yellow { background:rgba(241,196,15,0.18); color:#f1c40f; border:1px solid rgba(241,196,15,0.3); }
+  .b-green  { background:rgba(39,174,96,0.20);  color:#2ecc71; border:1px solid rgba(46,204,113,0.3); }
+  .b-gray   { background:rgba(255,255,255,0.08); color:rgba(255,255,255,0.5); border:1px solid rgba(255,255,255,0.12); }
+
+  /* ── RANKING ─────────────────────────────────────────── */
+  .rank-list { display:grid; gap:11px; }
+  .rank-card {
+    background: var(--card);
+    border:1px solid var(--border);
+    border-radius:13px; padding:14px 18px;
+    display:flex; align-items:center; gap:16px;
+    transition: transform .15s;
+  }
+  .rank-card:hover { transform: translateX(5px); }
+  .rank-card.g1 { background:linear-gradient(90deg,rgba(255,215,0,0.12),var(--card)); border-color:rgba(255,215,0,0.35); }
+  .rank-card.g2 { background:linear-gradient(90deg,rgba(192,192,192,0.10),var(--card)); border-color:rgba(192,192,192,0.25); }
+  .rank-card.g3 { background:linear-gradient(90deg,rgba(205,127,50,0.10),var(--card)); border-color:rgba(205,127,50,0.25); }
+  .rank-card.dn { border-color:rgba(231,76,60,0.25); }
+
+  .rank-icon { font-size:2.1em; min-width:48px; text-align:center; }
+  .rank-info { flex:1; }
+  .rank-name { font-size:1.05em; font-weight:700; margin-bottom:3px; }
+  .rank-sub  { font-size:0.78em; color:rgba(255,255,255,0.5); }
+  .rank-bar  { width:180px; }
+  .rank-h    { font-size:1.35em; font-weight:800; min-width:72px; text-align:right; }
+
+  /* ── HEATMAP ─────────────────────────────────────────── */
+  .legend { display:flex; gap:18px; flex-wrap:wrap; margin-bottom:12px; font-size:0.78em; }
+  .leg-i  { display:flex; align-items:center; gap:6px; }
+  .leg-dot{ width:12px; height:12px; border-radius:3px; }
+
+  .heat-wrap { overflow-x:auto; }
+  .heat-tbl  { width:100%; border-collapse:collapse; min-width:620px; }
+  .heat-tbl th {
+    background:rgba(0,34,102,0.4);
+    color: var(--amarelo); padding:9px 8px;
+    font-size:0.75em; text-align:center;
+  }
+  .heat-tbl td { padding:8px 6px; text-align:center; font-size:0.82em; }
+  .heat-tbl td.dn { text-align:left; padding-left:14px; font-weight:600; white-space:nowrap; }
+
+  .c-ok      { background:rgba(39,174,96,0.35);  color:#2ecc71; border-radius:5px; }
+  .c-parc    { background:rgba(230,126,34,0.30);  color:#e67e22; border-radius:5px; }
+  .c-susp    { background:rgba(241,196,15,0.22);  color:#f1c40f; border-radius:5px; }
+  .c-aus     { background:rgba(192,57,43,0.30);   color:#e74c3c; border-radius:5px; }
+
+  /* ── INSIGHTS ────────────────────────────────────────── */
+  .ins-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .ins-card {
+    background: var(--card);
+    border-left:4px solid var(--amarelo);
+    border-radius:0 12px 12px 0;
+    padding:15px 16px;
+  }
+  .ins-card.warn  { border-left-color: #e74c3c; }
+  .ins-card.ok    { border-left-color: #2ecc71; }
+  .ins-card.info  { border-left-color: #3498db; }
+  .ins-title { font-size:0.73em; text-transform:uppercase; letter-spacing:1px; color:rgba(255,255,255,0.45); margin-bottom:8px; }
+  .ins-body  { font-size:0.87em; line-height:1.55; }
+
+  /* ── ACTIONS ─────────────────────────────────────────── */
+  .act-list { list-style:none; display:grid; gap:10px; }
+  .act-list li {
+    background: rgba(0,34,102,0.25);
+    border:1px solid rgba(255,215,0,0.10);
+    border-radius:10px; padding:12px 16px;
+    display:flex; align-items:flex-start; gap:10px;
+    font-size:0.88em; line-height:1.5;
+  }
+  .act-icon { font-size:1.2em; flex-shrink:0; margin-top:1px; }
+
+  /* ── FOOTER ──────────────────────────────────────────── */
+  .footer {
+    text-align:center; padding:30px 20px;
+    color:rgba(255,255,255,0.25); font-size:0.78em;
+    border-top:1px solid rgba(255,255,255,0.08);
+  }
+
+  @media (max-width: 640px) {
+    .kpi-row { grid-template-columns: 1fr 1fr; }
+    .ins-grid { grid-template-columns: 1fr; }
+    .rank-bar { display:none; }
+    .header h1 { font-size:1.8em; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="copa-tag">⚽ Copa do Mundo 2026 Edition</div>
+  <div class="trophy">🏆</div>
+  <h1>Relatório de Worklogs</h1>
+  <div class="sub">Squad Lyra &nbsp;·&nbsp; PI Plan 1 — Iteração 6</div>
+  <div class="meta">Período: 08/06 a 19/06/2026 &nbsp;|&nbsp; 10 dias úteis &nbsp;|&nbsp; Capacidade: 80h / dev</div>
+  <div class="meta" style="margin-top:5px;">Gerado em 24/06/2026</div>
+</div>
+
+<div class="wrap">
+
+  <!-- ── KPIs ── -->
+  <div class="section">
+    <div class="sec-title">📊 Visão Geral da Sprint</div>
+    <div class="kpi-row">
+      <div class="kpi">
+        <div class="val">308.42h</div>
+        <div class="lbl">Total Lançado pelo Time</div>
+      </div>
+      <div class="kpi">
+        <div class="val">480h</div>
+        <div class="lbl">Capacidade Total (6 devs × 80h)</div>
+      </div>
+      <div class="kpi">
+        <div class="val" style="color:#e74c3c;">64.2%</div>
+        <div class="lbl">Aproveitamento da Capacidade</div>
+      </div>
+    </div>
+
+    <table class="cap-table">
+      <thead>
+        <tr>
+          <th>Dev</th>
+          <th>Lançado</th>
+          <th>Utilização</th>
+          <th>Delta vs 80h</th>
+          <th>Worklogs</th>
+          <th>Dias c/ reg.</th>
+          <th>Alerta</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Renan Gomes</strong></td>
+          <td><strong>86.25h</strong></td>
+          <td>
+            <div class="bar-wrap"><div class="bar" style="width:100%;background:#27ae60;"></div></div>
+            <span class="pct">108%</span>
+          </td>
+          <td class="pos">+6.25h</td>
+          <td>97</td>
+          <td>10 / 10</td>
+          <td><span class="badge b-yellow">2× 8h exatas</span></td>
+        </tr>
+        <tr>
+          <td><strong>Guilherme Henrique</strong></td>
+          <td>73.50h</td>
+          <td>
+            <div class="bar-wrap"><div class="bar" style="width:91.9%;background:#27ae60;"></div></div>
+            <span class="pct">92%</span>
+          </td>
+          <td class="neg">-6.50h</td>
+          <td>69</td>
+          <td>10 / 10</td>
+          <td><span class="badge b-yellow">1× 8h exatas</span></td>
+        </tr>
+        <tr>
+          <td><strong>Ederson Junior</strong></td>
+          <td>54.00h</td>
+          <td>
+            <div class="bar-wrap"><div class="bar" style="width:67.5%;background:#f39c12;"></div></div>
+            <span class="pct">68%</span>
+          </td>
+          <td class="neg">-26.00h</td>
+          <td>18</td>
+          <td>8 / 10</td>
+          <td><span class="badge b-yellow">3× 8h exatas ⚠️</span></td>
+        </tr>
+        <tr>
+          <td><strong>Lucas Cunha</strong></td>
+          <td>40.50h</td>
+          <td>
+            <div class="bar-wrap"><div class="bar" style="width:50.6%;background:#e74c3c;"></div></div>
+            <span class="pct">51%</span>
+          </td>
+          <td class="neg">-39.50h</td>
+          <td>24</td>
+          <td>8 / 10</td>
+          <td><span class="badge b-yellow">1× 8h exatas</span></td>
+        </tr>
+        <tr>
+          <td><strong>Alex Angelim</strong></td>
+          <td>30.17h</td>
+          <td>
+            <div class="bar-wrap"><div class="bar" style="width:37.7%;background:#e74c3c;"></div></div>
+            <span class="pct">38%</span>
+          </td>
+          <td class="neg">-49.83h</td>
+          <td>33</td>
+          <td>10 / 10</td>
+          <td><span class="badge b-red">Muito abaixo</span></td>
+        </tr>
+        <tr>
+          <td><strong>Arthur Henrique</strong></td>
+          <td>24.00h</td>
+          <td>
+            <div class="bar-wrap"><div class="bar" style="width:30%;background:#c0392b;"></div></div>
+            <span class="pct">30%</span>
+          </td>
+          <td class="neg">-56.00h</td>
+          <td>16</td>
+          <td>5 / 10</td>
+          <td><span class="badge b-red">Ausente 5 dias</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── RANKING ── -->
+  <div class="section">
+    <div class="sec-title">🏟️ Placar da Iteração — Quem Brilhou?</div>
+    <div class="rank-list">
+
+      <div class="rank-card g1">
+        <div class="rank-icon">🥇</div>
+        <div class="rank-info">
+          <div class="rank-name">Renan Gomes</div>
+          <div class="rank-sub">10/10 dias · 97 worklogs · acima da capacidade · craque da iteração</div>
+        </div>
+        <div class="rank-bar">
+          <div class="bar-wrap"><div class="bar" style="width:100%;background:#FFD700;"></div></div>
+        </div>
+        <div class="rank-h" style="color:#FFD700;">86.25h</div>
+      </div>
+
+      <div class="rank-card g2">
+        <div class="rank-icon">🥈</div>
+        <div class="rank-info">
+          <div class="rank-name">Guilherme Henrique</div>
+          <div class="rank-sub">10/10 dias · 69 worklogs · consistente, perto da meta</div>
+        </div>
+        <div class="rank-bar">
+          <div class="bar-wrap"><div class="bar" style="width:85.3%;background:#C0C0C0;"></div></div>
+        </div>
+        <div class="rank-h" style="color:#C0C0C0;">73.50h</div>
+      </div>
+
+      <div class="rank-card g3">
+        <div class="rank-icon">🥉</div>
+        <div class="rank-info">
+          <div class="rank-name">Ederson Junior</div>
+          <div class="rank-sub">8/10 dias · 18 worklogs · atenção à granularidade</div>
+        </div>
+        <div class="rank-bar">
+          <div class="bar-wrap"><div class="bar" style="width:62.6%;background:#CD7F32;"></div></div>
+        </div>
+        <div class="rank-h" style="color:#CD7F32;">54.00h</div>
+      </div>
+
+      <div class="rank-card">
+        <div class="rank-icon">4️⃣</div>
+        <div class="rank-info">
+          <div class="rank-name">Lucas Cunha</div>
+          <div class="rank-sub">8/10 dias · 24 worklogs · abaixo do esperado</div>
+        </div>
+        <div class="rank-bar">
+          <div class="bar-wrap"><div class="bar" style="width:47%;background:#e74c3c;"></div></div>
+        </div>
+        <div class="rank-h" style="color:#e74c3c;">40.50h</div>
+      </div>
+
+      <div class="rank-card dn">
+        <div class="rank-icon">😟</div>
+        <div class="rank-info">
+          <div class="rank-name">Alex Angelim</div>
+          <div class="rank-sub">10/10 dias presente · horas muito baixas (3.0h/dia em média)</div>
+        </div>
+        <div class="rank-bar">
+          <div class="bar-wrap"><div class="bar" style="width:35%;background:#c0392b;"></div></div>
+        </div>
+        <div class="rank-h" style="color:#c0392b;">30.17h</div>
+      </div>
+
+      <div class="rank-card dn">
+        <div class="rank-icon">😢</div>
+        <div class="rank-info">
+          <div class="rank-name">Arthur Henrique</div>
+          <div class="rank-sub">5/10 dias · 16 worklogs · ausente metade da sprint</div>
+        </div>
+        <div class="rank-bar">
+          <div class="bar-wrap"><div class="bar" style="width:27.8%;background:#922b21;"></div></div>
+        </div>
+        <div class="rank-h" style="color:#922b21;">24.00h</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── HEATMAP ── -->
+  <div class="section">
+    <div class="sec-title">📅 Presença Diária — Mapa de Calor</div>
+    <div class="legend">
+      <div class="leg-i"><div class="leg-dot" style="background:rgba(39,174,96,0.55);"></div>OK</div>
+      <div class="leg-i"><div class="leg-dot" style="background:rgba(230,126,34,0.55);"></div>Parcial (horas baixas)</div>
+      <div class="leg-i"><div class="leg-dot" style="background:rgba(241,196,15,0.40);"></div>Suspeito (8h exatas)</div>
+      <div class="leg-i"><div class="leg-dot" style="background:rgba(192,57,43,0.55);"></div>Ausente</div>
+    </div>
+    <div class="heat-wrap">
+      <table class="heat-tbl">
+        <thead>
+          <tr>
+            <th style="text-align:left;">Dev</th>
+            <th>08/06<br><small>Seg</small></th>
+            <th>09/06<br><small>Ter</small></th>
+            <th>10/06<br><small>Qua</small></th>
+            <th>11/06<br><small>Qui</small></th>
+            <th>12/06<br><small>Sex</small></th>
+            <th>15/06<br><small>Seg</small></th>
+            <th>16/06<br><small>Ter</small></th>
+            <th>17/06<br><small>Qua</small></th>
+            <th>18/06<br><small>Qui</small></th>
+            <th>19/06<br><small>Sex</small></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="dn">Alex Angelim</td>
+            <td class="c-parc">~</td><td class="c-ok">✓</td><td class="c-parc">~</td>
+            <td class="c-parc">~</td><td class="c-parc">~</td><td class="c-parc">~</td>
+            <td class="c-parc">~</td><td class="c-parc">~</td><td class="c-parc">~</td>
+            <td class="c-parc">~</td>
+          </tr>
+          <tr>
+            <td class="dn">Arthur Henrique</td>
+            <td class="c-aus">✗</td><td class="c-aus">✗</td><td class="c-aus">✗</td>
+            <td class="c-aus">✗</td><td class="c-parc">~</td><td class="c-ok">✓</td>
+            <td class="c-susp">8h</td><td class="c-ok">✓</td><td class="c-parc">~</td>
+            <td class="c-aus">✗</td>
+          </tr>
+          <tr>
+            <td class="dn">Ederson Junior</td>
+            <td class="c-parc">~</td><td class="c-aus">✗</td><td class="c-aus">✗</td>
+            <td class="c-parc">~</td><td class="c-susp">8h</td><td class="c-susp">8h</td>
+            <td class="c-ok">✓</td><td class="c-ok">✓</td><td class="c-susp">8h</td>
+            <td class="c-ok">✓</td>
+          </tr>
+          <tr>
+            <td class="dn">Guilherme Henrique</td>
+            <td class="c-ok">✓</td><td class="c-ok">✓</td><td class="c-ok">✓</td>
+            <td class="c-ok">✓</td><td class="c-ok">✓</td><td class="c-ok">✓</td>
+            <td class="c-susp">8h</td><td class="c-ok">✓</td><td class="c-ok">✓</td>
+            <td class="c-ok">✓</td>
+          </tr>
+          <tr>
+            <td class="dn">Lucas Cunha</td>
+            <td class="c-aus">✗</td><td class="c-ok">✓</td><td class="c-ok">✓</td>
+            <td class="c-susp">8h</td><td class="c-aus">✗</td><td class="c-ok">✓</td>
+            <td class="c-parc">~</td><td class="c-ok">✓</td><td class="c-parc">~</td>
+            <td class="c-parc">~</td>
+          </tr>
+          <tr>
+            <td class="dn">Renan Gomes</td>
+            <td class="c-ok">✓</td><td class="c-ok">✓</td><td class="c-ok">✓</td>
+            <td class="c-susp">8h</td><td class="c-ok">✓</td><td class="c-ok">✓</td>
+            <td class="c-ok">✓</td><td class="c-ok">✓</td><td class="c-ok">✓</td>
+            <td class="c-susp">8h</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── INSIGHTS ── -->
+  <div class="section">
+    <div class="sec-title">💡 Insights e Alertas</div>
+    <div class="ins-grid">
+
+      <div class="ins-card ok">
+        <div class="ins-title">⭐ Destaque Positivo</div>
+        <div class="ins-body">
+          <strong>Renan Gomes</strong> superou a capacidade com 86.25h e 97 worklogs —
+          melhor granularidade do time (9.7/dia). Registro exemplar.<br><br>
+          <strong>Guilherme Henrique</strong> manteve presença perfeita (10/10) e 92% de utilização.
+        </div>
+      </div>
+
+      <div class="ins-card warn">
+        <div class="ins-title">⚠️ Atenção — Arthur Henrique</div>
+        <div class="ins-body">
+          Ausente em <strong>5 dos 10 dias úteis</strong>, com apenas 24h lançadas (30% da capacidade).
+          Verificar se houve férias, atestado ou alocação não comunicada formalmente.
+        </div>
+      </div>
+
+      <div class="ins-card warn">
+        <div class="ins-title">🔍 Suspeito — Ederson Junior</div>
+        <div class="ins-body">
+          <strong>3 dias com 8h exatas</strong> e apenas 18 worklogs em 8 dias de presença
+          (2.25 worklogs/dia). Baixa granularidade sugere lançamentos retroativos ou estimados.
+        </div>
+      </div>
+
+      <div class="ins-card info">
+        <div class="ins-title">📉 Horas Baixas — Alex Angelim</div>
+        <div class="ins-body">
+          Presente todos os 10 dias, porém com apenas <strong>30.17h</strong> (38% da capacidade),
+          média de ~3h/dia. Investigar se está distribuindo horas em outros projetos
+          não rastreados pela Tempo API.
+        </div>
+      </div>
+
+      <div class="ins-card">
+        <div class="ins-title">📊 Saúde Geral do Time</div>
+        <div class="ins-body">
+          Apenas <strong>2 de 6 devs</strong> atingiram ≥80% da capacidade.
+          Total: 308.42h de 480h possíveis (<strong>64.2%</strong>).
+          Média do time: 51.4h (vs. 80h esperadas).
+        </div>
+      </div>
+
+      <div class="ins-card">
+        <div class="ins-title">🔔 Padrão 8h Exatas no Time</div>
+        <div class="ins-body">
+          <strong>8 ocorrências</strong> de lançamentos em 8h exatas no total.
+          Maior concentração em Ederson (3×). Para Renan (2×), o risco é menor —
+          alta granularidade (97 worklogs) corrobora os registros.
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── AÇÕES SUGERIDAS ── -->
+  <div class="section">
+    <div class="sec-title">🎯 Ações para a Próxima Iteração</div>
+    <ul class="act-list">
+      <li>
+        <span class="act-icon">📌</span>
+        <span><strong>Verificar ausências de Arthur Henrique:</strong> 5 dias sem lançamento
+        exige justificativa formal — conferir férias, atestado ou alocação externa não comunicada.</span>
+      </li>
+      <li>
+        <span class="act-icon">🔍</span>
+        <span><strong>Conversa 1:1 com Ederson e Alex</strong> sobre granularidade:
+        lançamentos de 8h exatas e poucos worklogs indicam que as horas reais
+        não estão sendo refletidas corretamente no dia a dia.</span>
+      </li>
+      <li>
+        <span class="act-icon">📋</span>
+        <span><strong>Lucas Cunha:</strong> 2 dias sem registro e apenas 51% da capacidade —
+        verificar se houve trabalho lançado em outros projetos ou horas não registradas.</span>
+      </li>
+      <li>
+        <span class="act-icon">⭐</span>
+        <span><strong>Reconhecer Renan e Guilherme</strong> pela consistência e qualidade dos registros —
+        ambos servem de referência para o time na retrospectiva.</span>
+      </li>
+      <li>
+        <span class="act-icon">📅</span>
+        <span><strong>Hábito para próxima sprint:</strong> lançar horas no mesmo dia, em subtarefas
+        específicas, evitando lançamentos retroativos em bloco (que resultam nos 8h exatas suspeitos).</span>
+      </li>
+    </ul>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  ⚽ Squad Lyra &nbsp;|&nbsp; Hub de Pagamentos Vivo &nbsp;|&nbsp; PI Plan 1 — Iteração 6<br>
+  <span style="margin-top:5px;display:inline-block;">
+    Copa do Mundo 2026 Edition &nbsp;·&nbsp; Dados: Tempo API (08/06 a 19/06/2026) &nbsp;·&nbsp; Gerado em 24/06/2026
+  </span>
+</div>
+
+</body>
+</html>
