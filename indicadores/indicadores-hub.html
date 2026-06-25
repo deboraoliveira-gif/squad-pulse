@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hub de Pagamentos — Indicadores</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    body { background: #0f1117; color: #e2e8f0; font-family: 'Inter', system-ui, sans-serif; }
+    .card { background: #1a1d27; border: 1px solid #2d3148; border-radius: 12px; }
+    .kpi-card { background: #1a1d27; border: 1px solid #2d3148; border-radius: 10px; transition: transform 0.15s; }
+    .kpi-card:hover { transform: translateY(-2px); }
+    .status-ok      { border-left: 4px solid #22c55e; }
+    .status-warn    { border-left: 4px solid #f59e0b; }
+    .status-bad     { border-left: 4px solid #ef4444; }
+    .status-neutral { border-left: 4px solid #6366f1; }
+    .tab-btn { border-bottom: 2px solid transparent; transition: all 0.15s; }
+    .tab-btn.active { border-bottom-color: #6366f1; color: #818cf8; }
+    select, input[type="month"] {
+      background: #1a1d27; border: 1px solid #2d3148; color: #e2e8f0;
+      border-radius: 8px; padding: 6px 12px; font-size: 0.875rem;
+      color-scheme: dark;
+    }
+    input[type="month"]::-webkit-calendar-picker-indicator { filter: invert(0.6); cursor: pointer; }
+    .badge-ok   { background: #14532d; color: #4ade80; }
+    .badge-warn { background: #451a03; color: #fbbf24; }
+    .badge-bad  { background: #450a0a; color: #f87171; }
+    .chart-container { position: relative; height: 260px; }
+    .section-title { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #6b7280; }
+  </style>
+</head>
+<body class="min-h-screen">
+
+<!-- ═══════════════════════════════════════════ DADOS ══════════════════════════════════════════ -->
+<script>
+const ALL_DATA = {
+  "2026-03": {"month":"2026-03","partial":false,"squads":{
+    "VHPE":{"name":"VHPE","label":"Cartão de Crédito","bcps_desenvolvidos":175,"bcps_testados":160,"bcps_em_producao":148,"bcps_ativados":135,"bcps_funcional":108,"bcps_nft":67,"horas_burn":920.0,"horas_burn_bcp":560.0,"horas_rework":88.0,"bugs_dev":8,"bugs_uat":4,"bugs_prod":0},
+    "VHPF":{"name":"VHPF","label":"Centaurus","bcps_desenvolvidos":180,"bcps_testados":165,"bcps_em_producao":152,"bcps_ativados":140,"bcps_funcional":110,"bcps_nft":70,"horas_burn":940.0,"horas_burn_bcp":580.0,"horas_rework":72.0,"bugs_dev":6,"bugs_uat":3,"bugs_prod":0},
+    "VHPH":{"name":"VHPH","label":"Pix Automático","bcps_desenvolvidos":200,"bcps_testados":185,"bcps_em_producao":170,"bcps_ativados":155,"bcps_funcional":122,"bcps_nft":78,"horas_burn":975.0,"horas_burn_bcp":590.0,"horas_rework":82.0,"bugs_dev":9,"bugs_uat":5,"bugs_prod":1},
+    "VHPK":{"name":"VHPK","label":"Reforma Tributária","bcps_desenvolvidos":145,"bcps_testados":130,"bcps_em_producao":118,"bcps_ativados":105,"bcps_funcional":88,"bcps_nft":57,"horas_burn":800.0,"horas_burn_bcp":470.0,"horas_rework":112.0,"bugs_dev":11,"bugs_uat":4,"bugs_prod":1}
+  }},
+  "2026-04": {"month":"2026-04","partial":false,"squads":{
+    "VHPE":{"name":"VHPE","label":"Cartão de Crédito","bcps_desenvolvidos":198,"bcps_testados":182,"bcps_em_producao":168,"bcps_ativados":155,"bcps_funcional":120,"bcps_nft":78,"horas_burn":1000.0,"horas_burn_bcp":610.0,"horas_rework":95.0,"bugs_dev":10,"bugs_uat":5,"bugs_prod":1},
+    "VHPF":{"name":"VHPF","label":"Centaurus","bcps_desenvolvidos":188,"bcps_testados":172,"bcps_em_producao":158,"bcps_ativados":148,"bcps_funcional":115,"bcps_nft":73,"horas_burn":960.0,"horas_burn_bcp":610.0,"horas_rework":80.0,"bugs_dev":7,"bugs_uat":3,"bugs_prod":0},
+    "VHPH":{"name":"VHPH","label":"Pix Automático","bcps_desenvolvidos":215,"bcps_testados":200,"bcps_em_producao":182,"bcps_ativados":168,"bcps_funcional":132,"bcps_nft":83,"horas_burn":1020.0,"horas_burn_bcp":630.0,"horas_rework":92.0,"bugs_dev":11,"bugs_uat":6,"bugs_prod":1},
+    "VHPK":{"name":"VHPK","label":"Reforma Tributária","bcps_desenvolvidos":152,"bcps_testados":138,"bcps_em_producao":124,"bcps_ativados":112,"bcps_funcional":92,"bcps_nft":60,"horas_burn":820.0,"horas_burn_bcp":480.0,"horas_rework":118.0,"bugs_dev":13,"bugs_uat":5,"bugs_prod":1}
+  }},
+  "2026-05": {"month":"2026-05","partial":false,"squads":{
+    "VHPE":{"name":"VHPE","label":"Cartão de Crédito","bcps_desenvolvidos":220,"bcps_testados":200,"bcps_em_producao":185,"bcps_ativados":170,"bcps_funcional":130,"bcps_nft":90,"horas_burn":1050.0,"horas_burn_bcp":630.0,"horas_rework":102.0,"bugs_dev":11,"bugs_uat":6,"bugs_prod":2},
+    "VHPF":{"name":"VHPF","label":"Centaurus","bcps_desenvolvidos":195,"bcps_testados":180,"bcps_em_producao":165,"bcps_ativados":155,"bcps_funcional":120,"bcps_nft":75,"horas_burn":980.0,"horas_burn_bcp":650.0,"horas_rework":88.0,"bugs_dev":8,"bugs_uat":3,"bugs_prod":0},
+    "VHPH":{"name":"VHPH","label":"Pix Automático","bcps_desenvolvidos":225,"bcps_testados":208,"bcps_em_producao":195,"bcps_ativados":182,"bcps_funcional":138,"bcps_nft":87,"horas_burn":1010.0,"horas_burn_bcp":620.0,"horas_rework":98.0,"bugs_dev":10,"bugs_uat":7,"bugs_prod":1},
+    "VHPK":{"name":"VHPK","label":"Reforma Tributária","bcps_desenvolvidos":160,"bcps_testados":145,"bcps_em_producao":130,"bcps_ativados":118,"bcps_funcional":95,"bcps_nft":65,"horas_burn":850.0,"horas_burn_bcp":500.0,"horas_rework":130.0,"bugs_dev":16,"bugs_uat":5,"bugs_prod":1}
+  }},
+  "2026-06": {"month":"2026-06","partial":true,"squads":{
+    "VHPE":{"name":"VHPE","label":"Cartão de Crédito","bcps_desenvolvidos":189,"bcps_testados":165,"bcps_em_producao":142,"bcps_ativados":130,"bcps_funcional":112,"bcps_nft":77,"horas_burn":987.5,"horas_burn_bcp":580.0,"horas_rework":118.0,"bugs_dev":9,"bugs_uat":5,"bugs_prod":1},
+    "VHPF":{"name":"VHPF","label":"Centaurus","bcps_desenvolvidos":210,"bcps_testados":198,"bcps_em_producao":180,"bcps_ativados":168,"bcps_funcional":130,"bcps_nft":80,"horas_burn":1100.0,"horas_burn_bcp":720.0,"horas_rework":95.0,"bugs_dev":7,"bugs_uat":4,"bugs_prod":0},
+    "VHPH":{"name":"VHPH","label":"Pix Automático","bcps_desenvolvidos":237,"bcps_testados":220,"bcps_em_producao":189,"bcps_ativados":175,"bcps_funcional":145,"bcps_nft":92,"horas_burn":1049.0,"horas_burn_bcp":652.0,"horas_rework":156.0,"bugs_dev":12,"bugs_uat":8,"bugs_prod":1},
+    "VHPK":{"name":"VHPK","label":"Reforma Tributária","bcps_desenvolvidos":175,"bcps_testados":160,"bcps_em_producao":148,"bcps_ativados":140,"bcps_funcional":100,"bcps_nft":75,"horas_burn":920.0,"horas_burn_bcp":540.0,"horas_rework":145.0,"bugs_dev":14,"bugs_uat":6,"bugs_prod":2}
+  }}
+};
+
+const METAS = {
+  horas_bcp:     { valor: 5,     modo: 'max', label: '≤ 5h/BCP' },
+  bugs_uat:      { valor: 0.050, modo: 'max', label: '≤ 0,050' },
+  bugs_prod:     { valor: 0.005, modo: 'max', label: '≤ 0,005' },
+  rework:        { valor: 0.12,  modo: 'max', label: '≤ 12%' },
+  funcional_pct: { valor: 0.70,  modo: 'min', label: '≥ 70%' },
+};
+
+const STATUS_CFG = {
+  bcps_desenvolvidos: { label: 'Desenvolvido', color: '#6366f1' },
+  bcps_testados:      { label: 'Testado',      color: '#f59e0b' },
+  bcps_em_producao:   { label: 'Em Produção',  color: '#22c55e' },
+  bcps_ativados:      { label: 'Ativado',      color: '#06b6d4' },
+};
+const ALL_STATUS = Object.keys(STATUS_CFG);
+</script>
+
+<!-- ═══════════════════════════════════════════ HEADER ══════════════════════════════════════════ -->
+<header class="border-b border-gray-800 px-8 py-4 flex items-center justify-between sticky top-0 z-50" style="background:#0f1117;">
+  <div>
+    <div class="text-xs text-indigo-400 font-semibold tracking-widest uppercase">Vivo · Hub de Pagamentos</div>
+    <div class="text-xl font-bold text-white">Indicadores</div>
+  </div>
+  <div class="flex items-center gap-4">
+    <div class="flex flex-col items-end">
+      <span class="section-title">De</span>
+      <input type="month" id="sel-from" value="2026-03" onchange="render()" />
+    </div>
+    <div class="flex flex-col items-end">
+      <span class="section-title">Até</span>
+      <input type="month" id="sel-to" value="2026-06" onchange="render()" />
+    </div>
+    <div class="flex flex-col items-end">
+      <span class="section-title">Squad</span>
+      <select id="sel-squad" onchange="render()">
+        <option value="ALL">Todas as squads</option>
+        <option value="VHPE">VHPE — Cartão de Crédito</option>
+        <option value="VHPF">VHPF — Centaurus</option>
+        <option value="VHPH">VHPH — Pix Automático</option>
+        <option value="VHPK">VHPK — Reforma Tributária</option>
+      </select>
+    </div>
+    <div class="flex flex-col items-end" id="wrap-sel-status">
+      <span class="section-title">Status BCP</span>
+      <select id="sel-status" onchange="render()">
+        <option value="ALL">Todos</option>
+        <option value="bcps_desenvolvidos">Desenvolvido</option>
+        <option value="bcps_testados">Testado</option>
+        <option value="bcps_em_producao">Em Produção</option>
+        <option value="bcps_ativados">Ativado</option>
+      </select>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════ TABS ═══════════════════════════════════════════ -->
+<div class="flex gap-0 px-8 pt-4 border-b border-gray-800">
+  <button class="tab-btn active px-5 py-2 text-sm font-medium text-gray-300" data-tab="throughput"   onclick="switchTab(this)">Throughput</button>
+  <button class="tab-btn px-5 py-2 text-sm font-medium text-gray-500"        data-tab="produtividade" onclick="switchTab(this)">Produtividade</button>
+  <button class="tab-btn px-5 py-2 text-sm font-medium text-gray-500"        data-tab="qualidade"     onclick="switchTab(this)">Qualidade</button>
+  <button class="tab-btn px-5 py-2 text-sm font-medium text-gray-500"        data-tab="rework"        onclick="switchTab(this)">Rework</button>
+</div>
+
+<main class="px-8 py-6 space-y-8" id="main-content"></main>
+
+<!-- ═══════════════════════════════════════════ JS ════════════════════════════════════════════ -->
+<script>
+let charts = {};
+let activeTab = 'throughput';
+
+// ── Helpers de filtro ─────────────────────────────────────────────────────────
+function getFilteredMonths() {
+  const from = document.getElementById('sel-from').value;
+  const to   = document.getElementById('sel-to').value;
+  return Object.keys(ALL_DATA).filter(m => m >= from && m <= to).sort();
+}
+
+function squadFilter() { return document.getElementById('sel-squad').value; }
+function statusFilter() { return document.getElementById('sel-status').value; }
+
+function fmtMonth(m) {
+  const [y, mo] = m.split('-');
+  const names = ['','jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+  return `${names[+mo]}/${y.slice(2)}`;
+}
+
+// Agrega squads de um mês conforme filtro de squad
+function aggMonth(monthKey) {
+  const data = ALL_DATA[monthKey];
+  if (!data) return null;
+  const sq = squadFilter();
+  const list = sq === 'ALL'
+    ? Object.values(data.squads || {})
+    : (data.squads?.[sq] ? [data.squads[sq]] : []);
+  const agg = { bcps_desenvolvidos:0, bcps_testados:0, bcps_em_producao:0, bcps_ativados:0, bcps_funcional:0, bcps_nft:0, horas_burn:0, horas_burn_bcp:0, horas_rework:0, bugs_dev:0, bugs_uat:0, bugs_prod:0 };
+  list.forEach(s => Object.keys(agg).forEach(k => agg[k] += (s[k] || 0)));
+  return agg;
+}
+
+// Agrega todos os meses do período
+function aggPeriod(months) {
+  const total = { bcps_desenvolvidos:0, bcps_testados:0, bcps_em_producao:0, bcps_ativados:0, bcps_funcional:0, bcps_nft:0, horas_burn:0, horas_burn_bcp:0, horas_rework:0, bugs_dev:0, bugs_uat:0, bugs_prod:0 };
+  months.forEach(m => { const a = aggMonth(m); if (a) Object.keys(total).forEach(k => total[k] += a[k]); });
+  return total;
+}
+
+function hasPartial(months) {
+  return months.some(m => ALL_DATA[m]?.partial);
+}
+
+// ── UI helpers ────────────────────────────────────────────────────────────────
+function kpiStatus(value, meta) {
+  if (!meta) return 'neutral';
+  const ok   = meta.modo === 'max' ? value <= meta.valor        : value >= meta.valor;
+  const warn = meta.modo === 'max' ? value <= meta.valor * 1.2  : value >= meta.valor * 0.85;
+  return ok ? 'ok' : warn ? 'warn' : 'bad';
+}
+
+function fmtNum(n, dec=0) { return (+n).toLocaleString('pt-BR', {minimumFractionDigits:dec, maximumFractionDigits:dec}); }
+function fmtPct(n) { return ((+n)*100).toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2}) + '%'; }
+
+function kpiCard(title, value, displayValue, meta, sublabel='') {
+  const st  = kpiStatus(value, meta);
+  const cls = { ok:'badge-ok', warn:'badge-warn', bad:'badge-bad', neutral:'' }[st];
+  return `
+    <div class="kpi-card status-${st} p-4 flex flex-col gap-1">
+      <span class="section-title">${title}</span>
+      <span class="text-2xl font-bold text-white">${displayValue}</span>
+      ${sublabel ? `<span class="text-xs text-gray-400">${sublabel}</span>` : ''}
+      ${meta ? `<span class="text-xs px-2 py-0.5 rounded-full ${cls} self-start mt-1">Meta ${meta.label}</span>` : ''}
+    </div>`;
+}
+
+// ── Chart factories ───────────────────────────────────────────────────────────
+function mkChart(id, type, labels, datasets, opts={}) {
+  const ctx = document.getElementById(id);
+  if (!ctx) return;
+  if (charts[id]) charts[id].destroy();
+  const stacked = opts.stacked || false;
+  charts[id] = new Chart(ctx, {
+    type,
+    data: { labels, datasets },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { labels: { color: '#9ca3af', font: { size: 11 } } } },
+      scales: type === 'doughnut' ? {} : {
+        x: { stacked, ticks: { color: '#6b7280' }, grid: { color: '#1f2937' } },
+        y: { stacked, ticks: { color: '#6b7280' }, grid: { color: '#1f2937' } },
+      },
+      ...(opts.extra || {})
+    }
+  });
+}
+
+function metaLine(months, valor, color='#22c55e') {
+  return { label: 'Meta', data: months.map(() => valor), borderColor: color, borderDash: [6,3], borderWidth: 1.5, pointRadius: 0, fill: false };
+}
+
+// ══════════════════════════════════════════ TABS ══════════════════════════════════════════════
+
+function renderThroughput(months, period) {
+  const sf = statusFilter();
+  const activeStatuses = sf === 'ALL' ? ALL_STATUS : [sf];
+  const pctF = period.bcps_funcional / (period.bcps_desenvolvidos || 1);
+  const pctN = period.bcps_nft       / (period.bcps_desenvolvidos || 1);
+  const labels = months.map(fmtMonth);
+
+  const kpiCards = ALL_STATUS.map(sk => {
+    const cfg = STATUS_CFG[sk];
+    const dimmed = sf !== 'ALL' && sk !== sf;
+    return `
+      <div class="kpi-card p-4 flex flex-col gap-1 ${dimmed ? 'opacity-30' : ''}" style="border-left:4px solid ${cfg.color}">
+        <span class="section-title">${cfg.label}</span>
+        <span class="text-2xl font-bold text-white">${fmtNum(period[sk])}</span>
+        <span class="text-xs text-gray-500">no período</span>
+      </div>`;
+  }).join('');
+
+  document.getElementById('main-content').innerHTML = `
+    <div>
+      <p class="section-title mb-3">Total do período</p>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">${kpiCards}</div>
+    </div>
+
+    <div class="card p-5">
+      <p class="section-title mb-3">Evolução mensal por Status</p>
+      <div class="chart-container" style="height:300px">
+        <canvas id="chart-tp-main"></canvas>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="card p-5 col-span-2">
+        <p class="section-title mb-3">Funcional × Não Funcional — por mês</p>
+        <div class="chart-container">
+          <canvas id="chart-tp-fn-bar"></canvas>
+        </div>
+      </div>
+      <div class="card p-5 col-span-1 flex flex-col items-center justify-center gap-3">
+        <p class="section-title w-full">Funcional × NFT — período total</p>
+        <div class="grid grid-cols-2 gap-3 w-full">
+          ${kpiCard('Funcional',     pctF, fmtPct(pctF), METAS.funcional_pct)}
+          ${kpiCard('Não Funcional', pctN, fmtPct(pctN), null)}
+        </div>
+        <div style="height:120px;width:100%;position:relative">
+          <canvas id="chart-tp-donut"></canvas>
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Linha/barra empilhada: eixo X = meses, cor = status
+  mkChart('chart-tp-main', 'bar', labels,
+    activeStatuses.map(sk => ({
+      label: STATUS_CFG[sk].label,
+      data:  months.map(m => aggMonth(m)?.[sk] || 0),
+      backgroundColor: STATUS_CFG[sk].color + 'cc',
+    })),
+    { stacked: true }
+  );
+
+  // Funcional vs NFT por mês
+  mkChart('chart-tp-fn-bar', 'bar', labels, [
+    { label: 'Funcional',     data: months.map(m => aggMonth(m)?.bcps_funcional || 0), backgroundColor: '#6366f1cc' },
+    { label: 'Não Funcional', data: months.map(m => aggMonth(m)?.bcps_nft       || 0), backgroundColor: '#374151' },
+  ], { stacked: true });
+
+  // Donut período total
+  mkChart('chart-tp-donut', 'doughnut',
+    ['Funcional','Não Funcional'],
+    [{ data: [period.bcps_funcional, period.bcps_nft], backgroundColor: ['#6366f1','#374151'], borderWidth: 0 }],
+    { extra: { plugins: { legend: { labels:{ color:'#9ca3af', font:{size:11} } } }, cutout:'65%' } }
+  );
+}
+
+function renderProdutividade(months, period) {
+  const labels  = months.map(fmtMonth);
+  const hBCP    = period.horas_burn_bcp / (period.bcps_desenvolvidos || 1);
+
+  document.getElementById('main-content').innerHTML = `
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      ${kpiCard('Produtividade (h/BCP)', hBCP, fmtNum(hBCP,2)+'h', METAS.horas_bcp, 'Horas Burn BCP ÷ BCPs Desenvolvidos')}
+      ${kpiCard('Horas Burn Total',      period.horas_burn,     fmtNum(period.horas_burn,1)+'h',     null, 'total do período')}
+      ${kpiCard('Horas Burn BCP',        period.horas_burn_bcp, fmtNum(period.horas_burn_bcp,1)+'h', null, 'total do período')}
+    </div>
+
+    <div class="card p-5">
+      <p class="section-title mb-3">Horas/BCP — evolução mensal</p>
+      <div class="chart-container">
+        <canvas id="chart-prod-hbcp"></canvas>
+      </div>
+    </div>
+
+    <div class="card p-5">
+      <p class="section-title mb-3">Horas Burn BCP × Burn Total — por mês</p>
+      <div class="chart-container">
+        <canvas id="chart-prod-burn"></canvas>
+      </div>
+    </div>
+  `;
+
+  mkChart('chart-prod-hbcp', 'line', labels, [
+    { label: 'h/BCP',
+      data: months.map(m => { const a = aggMonth(m); return a ? +(a.horas_burn_bcp/(a.bcps_desenvolvidos||1)).toFixed(2) : 0; }),
+      borderColor: '#818cf8', backgroundColor: '#6366f133', fill: true, tension: 0.35,
+    },
+    metaLine(months, METAS.horas_bcp.valor),
+  ]);
+
+  mkChart('chart-prod-burn', 'bar', labels, [
+    { label: 'Burn BCP',   data: months.map(m => aggMonth(m)?.horas_burn_bcp || 0), backgroundColor: '#6366f1cc' },
+    { label: 'Burn Total', data: months.map(m => aggMonth(m)?.horas_burn     || 0), backgroundColor: '#1f2937' },
+  ]);
+}
+
+function renderQualidade(months, period) {
+  const labels   = months.map(fmtMonth);
+  const bugsUAT  = period.bugs_uat  / (period.bcps_desenvolvidos || 1);
+  const bugsPROD = period.bugs_prod / (period.bcps_em_producao   || 1);
+
+  document.getElementById('main-content').innerHTML = `
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      ${kpiCard('Bugs/BCP em UAT',  bugsUAT,  fmtNum(bugsUAT,3),  METAS.bugs_uat,  `${period.bugs_uat} bugs ÷ ${period.bcps_desenvolvidos} BCPs`)}
+      ${kpiCard('Bugs/BCP em PROD', bugsPROD, fmtNum(bugsPROD,4), METAS.bugs_prod, `${period.bugs_prod} bugs ÷ ${period.bcps_em_producao} BCPs em Prod`)}
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="card p-5">
+        <p class="section-title mb-3">Bugs/BCP UAT — evolução mensal</p>
+        <div class="chart-container">
+          <canvas id="chart-q-uat"></canvas>
+        </div>
+      </div>
+      <div class="card p-5">
+        <p class="section-title mb-3">Bugs/BCP PROD — evolução mensal</p>
+        <div class="chart-container">
+          <canvas id="chart-q-prod"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="card p-5">
+      <p class="section-title mb-3">Volume de Bugs por Fase — por mês</p>
+      <div class="chart-container">
+        <canvas id="chart-q-vol"></canvas>
+      </div>
+    </div>
+  `;
+
+  mkChart('chart-q-uat', 'line', labels, [
+    { label: 'Bugs/BCP UAT',
+      data: months.map(m => { const a = aggMonth(m); return a ? +(a.bugs_uat/(a.bcps_desenvolvidos||1)).toFixed(4) : 0; }),
+      borderColor: '#ef4444', backgroundColor: '#ef444433', fill: true, tension: 0.35,
+    },
+    metaLine(months, METAS.bugs_uat.valor),
+  ]);
+
+  mkChart('chart-q-prod', 'line', labels, [
+    { label: 'Bugs/BCP PROD',
+      data: months.map(m => { const a = aggMonth(m); return a ? +(a.bugs_prod/(a.bcps_em_producao||1)).toFixed(5) : 0; }),
+      borderColor: '#f59e0b', backgroundColor: '#f59e0b33', fill: true, tension: 0.35,
+    },
+    metaLine(months, METAS.bugs_prod.valor, '#22c55e'),
+  ]);
+
+  mkChart('chart-q-vol', 'bar', labels, [
+    { label: 'Bugs DEV',  data: months.map(m => aggMonth(m)?.bugs_dev  || 0), backgroundColor: '#f59e0bcc' },
+    { label: 'Bugs UAT',  data: months.map(m => aggMonth(m)?.bugs_uat  || 0), backgroundColor: '#ef4444cc' },
+    { label: 'Bugs PROD', data: months.map(m => aggMonth(m)?.bugs_prod || 0), backgroundColor: '#7f1d1d' },
+  ], { stacked: true });
+}
+
+function renderRework(months, period) {
+  const labels    = months.map(fmtMonth);
+  const reworkPct = period.horas_rework / (period.horas_burn || 1);
+
+  document.getElementById('main-content').innerHTML = `
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      ${kpiCard('Retrabalho', reworkPct, fmtPct(reworkPct), METAS.rework, 'Horas Bugs ÷ Horas Burn')}
+      ${kpiCard('Horas em Bugs', period.horas_rework, fmtNum(period.horas_rework,1)+'h', null, 'total do período')}
+      ${kpiCard('Horas Burn',    period.horas_burn,   fmtNum(period.horas_burn,1)+'h',   null, 'total do período')}
+    </div>
+
+    <div class="card p-5">
+      <p class="section-title mb-3">% Retrabalho — evolução mensal</p>
+      <div class="chart-container">
+        <canvas id="chart-rw-pct"></canvas>
+      </div>
+    </div>
+
+    <div class="card p-5">
+      <p class="section-title mb-3">Horas Bugs × Horas Burn — por mês</p>
+      <div class="chart-container">
+        <canvas id="chart-rw-vol"></canvas>
+      </div>
+    </div>
+  `;
+
+  mkChart('chart-rw-pct', 'line', labels, [
+    { label: '% Retrabalho',
+      data: months.map(m => { const a = aggMonth(m); return a ? +((a.horas_rework/(a.horas_burn||1))*100).toFixed(2) : 0; }),
+      borderColor: '#ef4444', backgroundColor: '#ef444433', fill: true, tension: 0.35,
+    },
+    metaLine(months, METAS.rework.valor * 100),
+  ]);
+
+  mkChart('chart-rw-vol', 'bar', labels, [
+    { label: 'Horas Bugs', data: months.map(m => aggMonth(m)?.horas_rework || 0), backgroundColor: '#ef4444cc' },
+    { label: 'Horas Burn', data: months.map(m => aggMonth(m)?.horas_burn   || 0), backgroundColor: '#1f2937' },
+  ]);
+}
+
+// ── Router principal ──────────────────────────────────────────────────────────
+function render() {
+  const months = getFilteredMonths();
+  if (!months.length) {
+    document.getElementById('main-content').innerHTML =
+      `<p class="text-gray-500 text-sm">Nenhum dado no período selecionado.</p>`;
+    return;
+  }
+  const period = aggPeriod(months);
+
+  // Banner parcial
+  const banner = hasPartial(months)
+    ? `<div class="mb-2 text-xs text-yellow-400 bg-yellow-900/30 border border-yellow-700/40 rounded px-4 py-2">⚠ Um ou mais meses no período ainda estão parciais.</div>`
+    : '';
+  document.getElementById('main-content').innerHTML = banner;
+
+  if      (activeTab === 'throughput')   renderThroughput(months, period);
+  else if (activeTab === 'produtividade') renderProdutividade(months, period);
+  else if (activeTab === 'qualidade')     renderQualidade(months, period);
+  else if (activeTab === 'rework')        renderRework(months, period);
+}
+
+function switchTab(btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  activeTab = btn.dataset.tab;
+  document.getElementById('wrap-sel-status').style.display =
+    activeTab === 'throughput' ? '' : 'none';
+  render();
+}
+
+render();
+</script>
+
+<footer class="border-t border-gray-800 px-8 py-4 mt-8 flex items-center justify-between text-xs text-gray-600">
+  <span>Hub de Pagamentos · Indicadores v0.1 MVP</span>
+  <span id="footer-date"></span>
+</footer>
+<script>
+  document.getElementById('footer-date').textContent =
+    'Gerado em ' + new Date().toLocaleDateString('pt-BR', {day:'2-digit',month:'short',year:'numeric'});
+</script>
+</body>
+</html>
