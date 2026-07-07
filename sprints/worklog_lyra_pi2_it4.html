@@ -66,6 +66,11 @@
     margin-bottom:8px; margin-left:8px;
     border: 1px solid rgba(255,215,0,0.3);
   }
+  .sprint-tag.done {
+    background: rgba(39,174,96,0.15);
+    color: #2ecc71;
+    border-color: rgba(46,204,113,0.3);
+  }
   .header h1 {
     font-size:2.6em; font-weight:800;
     color: var(--amarelo);
@@ -75,17 +80,6 @@
   .header .sub  { font-size:1.15em; color:rgba(255,255,255,0.80); margin-bottom:5px; }
   .header .meta { font-size:0.88em; color:rgba(255,255,255,0.50); margin-top:4px; }
   .trophy { font-size:3em; margin:6px 0; }
-
-  .alert-banner {
-    background: rgba(241,196,15,0.15);
-    border: 1px solid rgba(241,196,15,0.35);
-    border-radius: 10px;
-    padding: 8px 18px;
-    font-size: 0.82em;
-    color: #f1c40f;
-    margin-top: 14px;
-    display: inline-block;
-  }
 
   /* ── CONTAINER ───────────────────────────────────────── */
   .wrap { max-width:1060px; margin:0 auto; padding:28px 20px 60px; }
@@ -224,7 +218,6 @@
   .c-parc    { background:rgba(230,126,34,0.30);  color:#e67e22; border-radius:5px; }
   .c-susp    { background:rgba(241,196,15,0.22);  color:#f1c40f; border-radius:5px; font-weight:700; }
   .c-aus     { background:rgba(192,57,43,0.30);   color:#e74c3c; border-radius:5px; }
-  .c-future  { background:rgba(255,255,255,0.04); color:rgba(255,255,255,0.2); border-radius:5px; font-style:italic; }
 
   /* ── INSIGHTS ────────────────────────────────────────── */
   .ins-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
@@ -272,14 +265,13 @@
 <div class="header">
   <div>
     <span class="copa-tag">⚽ Copa do Mundo 2026 Edition</span>
-    <span class="sprint-tag">⚠️ Sprint em andamento</span>
+    <span class="sprint-tag done">✅ Sprint Encerrada</span>
   </div>
   <div class="trophy">🏆</div>
   <h1>Relatório de Worklogs</h1>
   <div class="sub">Squad Lyra &nbsp;·&nbsp; PI Plan 2 — Iteração 4</div>
   <div class="meta">Período: 22/06 a 03/07/2026 &nbsp;|&nbsp; 10 dias úteis &nbsp;|&nbsp; Capacidade: 80h / dev</div>
-  <div class="meta" style="margin-top:5px;">Gerado em 02/07/2026</div>
-  <div class="alert-banner">📊 Dados parciais até 02/07 — a sprint encerra em 03/07/2026</div>
+  <div class="meta" style="margin-top:5px;">Gerado em 07/07/2026</div>
 </div>
 
 <div class="wrap">
@@ -289,7 +281,7 @@
     <div class="sec-title">📊 Visão Geral da Sprint</div>
     <div class="kpi-row">
       <div class="kpi">
-        <div class="val">289.39h</div>
+        <div class="val">375.48h</div>
         <div class="lbl">Total Lançado pelo Time</div>
       </div>
       <div class="kpi">
@@ -297,8 +289,8 @@
         <div class="lbl">Capacidade Total (6 devs × 80h)</div>
       </div>
       <div class="kpi">
-        <div class="val" style="color:#f39c12;">60.3%</div>
-        <div class="lbl">Aproveitamento — falta 1 dia útil</div>
+        <div class="val" style="color:#f39c12;">78.2%</div>
+        <div class="lbl">Aproveitamento — sprint encerrada</div>
       </div>
     </div>
 
@@ -317,75 +309,75 @@
       <tbody>
         <tr>
           <td><strong>Renan Gomes</strong></td>
-          <td><strong>63.50h</strong></td>
+          <td><strong>80.67h</strong></td>
           <td>
-            <div class="bar-wrap"><div class="bar" style="width:79.4%;background:#f39c12;"></div></div>
-            <span class="pct">79.4%</span>
+            <div class="bar-wrap"><div class="bar" style="width:100%;background:#27ae60;"></div></div>
+            <span class="pct">100.8%</span>
           </td>
-          <td class="neg">-16.50h</td>
-          <td>68</td>
-          <td>9 / 10</td>
+          <td class="pos">+0.67h</td>
+          <td>88</td>
+          <td>10 / 10</td>
           <td><span class="badge b-yellow">2× 8h exatas</span></td>
         </tr>
         <tr>
           <td><strong>Guilherme Henrique</strong></td>
-          <td>56.55h</td>
+          <td>71.72h</td>
           <td>
-            <div class="bar-wrap"><div class="bar" style="width:70.7%;background:#f39c12;"></div></div>
-            <span class="pct">70.7%</span>
+            <div class="bar-wrap"><div class="bar" style="width:89.6%;background:#27ae60;"></div></div>
+            <span class="pct">89.6%</span>
           </td>
-          <td class="neg">-23.45h</td>
-          <td>50</td>
-          <td>7 / 10</td>
+          <td class="neg">-8.28h</td>
+          <td>60</td>
+          <td>9 / 10</td>
           <td><span class="badge b-gray">Ausente 29/06</span></td>
         </tr>
         <tr>
           <td><strong>Ederson Junior</strong></td>
-          <td>47.67h</td>
+          <td>65.67h</td>
           <td>
-            <div class="bar-wrap"><div class="bar" style="width:59.6%;background:#e74c3c;"></div></div>
-            <span class="pct">59.6%</span>
+            <div class="bar-wrap"><div class="bar" style="width:82.1%;background:#27ae60;"></div></div>
+            <span class="pct">82.1%</span>
           </td>
-          <td class="neg">-32.33h</td>
-          <td>22</td>
-          <td>8 / 10</td>
+          <td class="neg">-14.33h</td>
+          <td>25</td>
+          <td>10 / 10</td>
           <td><span class="badge b-yellow">1× 8h exatas</span></td>
         </tr>
         <tr>
-          <td><strong>Arthur Henrique</strong></td>
-          <td>44.00h</td>
-          <td>
-            <div class="bar-wrap"><div class="bar" style="width:55.0%;background:#e74c3c;"></div></div>
-            <span class="pct">55.0%</span>
-          </td>
-          <td class="neg">-36.00h</td>
-          <td>34</td>
-          <td>8 / 10</td>
-          <td><span class="badge b-yellow">2× 8h exatas</span></td>
-        </tr>
-        <tr>
           <td><strong>Lucas Cunha</strong></td>
-          <td>41.50h</td>
+          <td>58.50h</td>
           <td>
-            <div class="bar-wrap"><div class="bar" style="width:51.9%;background:#e74c3c;"></div></div>
-            <span class="pct">51.9%</span>
+            <div class="bar-wrap"><div class="bar" style="width:73.1%;background:#f39c12;"></div></div>
+            <span class="pct">73.1%</span>
           </td>
-          <td class="neg">-38.50h</td>
-          <td>29</td>
-          <td>7 / 10</td>
-          <td><span class="badge b-yellow">Ausente 01–02/07</span></td>
+          <td class="neg">-21.50h</td>
+          <td>38</td>
+          <td>10 / 10</td>
+          <td><span class="badge b-yellow">Abaixo</span></td>
         </tr>
         <tr>
           <td><strong>Alex Angelim</strong></td>
-          <td>36.17h</td>
+          <td>50.92h</td>
           <td>
-            <div class="bar-wrap"><div class="bar" style="width:45.2%;background:#c0392b;"></div></div>
-            <span class="pct">45.2%</span>
+            <div class="bar-wrap"><div class="bar" style="width:63.7%;background:#f39c12;"></div></div>
+            <span class="pct">63.7%</span>
           </td>
-          <td class="neg">-43.83h</td>
-          <td>38</td>
-          <td>8 / 10</td>
-          <td><span class="badge b-red">Muito abaixo</span></td>
+          <td class="neg">-29.08h</td>
+          <td>45</td>
+          <td>10 / 10</td>
+          <td><span class="badge b-yellow">Abaixo</span></td>
+        </tr>
+        <tr>
+          <td><strong>Arthur Henrique</strong></td>
+          <td>48.00h</td>
+          <td>
+            <div class="bar-wrap"><div class="bar" style="width:60.0%;background:#f39c12;"></div></div>
+            <span class="pct">60.0%</span>
+          </td>
+          <td class="neg">-32.00h</td>
+          <td>37</td>
+          <td>9 / 10</td>
+          <td><span class="badge b-yellow">Abaixo</span><span class="badge b-yellow">2× 8h exatas</span></td>
         </tr>
       </tbody>
     </table>
@@ -400,72 +392,72 @@
         <div class="rank-icon">🥇</div>
         <div class="rank-info">
           <div class="rank-name">Renan Gomes</div>
-          <div class="rank-sub">9/10 dias · 68 worklogs · lidera com 79.4% da cap. · 7.6 worklogs/dia</div>
+          <div class="rank-sub">10/10 dias · 88 worklogs · único a atingir 100% da capacidade · 8.8/dia</div>
         </div>
         <div class="rank-bar">
           <div class="bar-wrap"><div class="bar" style="width:100%;background:#FFD700;"></div></div>
         </div>
-        <div class="rank-h" style="color:#FFD700;">63.50h</div>
+        <div class="rank-h" style="color:#FFD700;">80.67h</div>
       </div>
 
       <div class="rank-card g2">
         <div class="rank-icon">🥈</div>
         <div class="rank-info">
           <div class="rank-name">Guilherme Henrique</div>
-          <div class="rank-sub">7/10 dias · 50 worklogs · consistente, pares de +10h na 2ª semana</div>
+          <div class="rank-sub">9/10 dias · 60 worklogs · forte recuperação na 2ª semana (10h e 9.45h)</div>
         </div>
         <div class="rank-bar">
-          <div class="bar-wrap"><div class="bar" style="width:89.1%;background:#C0C0C0;"></div></div>
+          <div class="bar-wrap"><div class="bar" style="width:88.9%;background:#C0C0C0;"></div></div>
         </div>
-        <div class="rank-h" style="color:#C0C0C0;">56.55h</div>
+        <div class="rank-h" style="color:#C0C0C0;">71.72h</div>
       </div>
 
       <div class="rank-card g3">
         <div class="rank-icon">🥉</div>
         <div class="rank-info">
           <div class="rank-name">Ederson Junior</div>
-          <div class="rank-sub">8/10 dias · 22 worklogs · atenção à granularidade (2.75/dia)</div>
+          <div class="rank-sub">10/10 dias · 25 worklogs · 82.1% da cap · atenção à granularidade (2.5/dia)</div>
         </div>
         <div class="rank-bar">
-          <div class="bar-wrap"><div class="bar" style="width:75.1%;background:#CD7F32;"></div></div>
+          <div class="bar-wrap"><div class="bar" style="width:81.4%;background:#CD7F32;"></div></div>
         </div>
-        <div class="rank-h" style="color:#CD7F32;">47.67h</div>
+        <div class="rank-h" style="color:#CD7F32;">65.67h</div>
       </div>
 
       <div class="rank-card">
         <div class="rank-icon">4️⃣</div>
         <div class="rank-info">
-          <div class="rank-name">Arthur Henrique</div>
-          <div class="rank-sub">8/10 dias · 34 worklogs · precisa lançar 03/07 para fechar sprint</div>
+          <div class="rank-name">Lucas Cunha</div>
+          <div class="rank-sub">10/10 dias · 38 worklogs · 73.1% da cap · desenvolvimento quase puro (99.1% burn)</div>
         </div>
         <div class="rank-bar">
-          <div class="bar-wrap"><div class="bar" style="width:69.3%;background:#e74c3c;"></div></div>
+          <div class="bar-wrap"><div class="bar" style="width:72.5%;background:#f39c12;"></div></div>
         </div>
-        <div class="rank-h" style="color:#e74c3c;">44.00h</div>
+        <div class="rank-h" style="color:#f39c12;">58.50h</div>
       </div>
 
       <div class="rank-card dn">
         <div class="rank-icon">😟</div>
         <div class="rank-info">
-          <div class="rank-name">Lucas Cunha</div>
-          <div class="rank-sub">7/10 dias · 29 worklogs · sem registro em 01/07 e 02/07 (hoje)</div>
+          <div class="rank-name">Alex Angelim</div>
+          <div class="rank-sub">10/10 dias presente · média 5.1h/dia · 27% das horas em All Work (Overhead CI&T)</div>
         </div>
         <div class="rank-bar">
-          <div class="bar-wrap"><div class="bar" style="width:65.4%;background:#c0392b;"></div></div>
+          <div class="bar-wrap"><div class="bar" style="width:63.1%;background:#c0392b;"></div></div>
         </div>
-        <div class="rank-h" style="color:#c0392b;">41.50h</div>
+        <div class="rank-h" style="color:#c0392b;">50.92h</div>
       </div>
 
       <div class="rank-card dn">
         <div class="rank-icon">😢</div>
         <div class="rank-info">
-          <div class="rank-name">Alex Angelim</div>
-          <div class="rank-sub">8/10 dias presente · média 4.5h/dia · horas muito abaixo do esperado</div>
+          <div class="rank-name">Arthur Henrique</div>
+          <div class="rank-sub">9/10 dias · 37 worklogs · 60% da cap · sem registro em 02/07</div>
         </div>
         <div class="rank-bar">
-          <div class="bar-wrap"><div class="bar" style="width:57.0%;background:#922b21;"></div></div>
+          <div class="bar-wrap"><div class="bar" style="width:59.5%;background:#922b21;"></div></div>
         </div>
-        <div class="rank-h" style="color:#922b21;">36.17h</div>
+        <div class="rank-h" style="color:#922b21;">48.00h</div>
       </div>
 
     </div>
@@ -478,7 +470,7 @@
     <!-- KPIs squad -->
     <div class="bb-summary">
       <div class="bb-kpi burn">
-        <div class="val">242.57h</div>
+        <div class="val">324.15h</div>
         <div class="lbl">🔥 Burn (Desenvolvimento)<br>Sub-Imp, Sub-Test, Sub-Bug, Sub-A&amp;D, Daily...</div>
       </div>
       <div class="bb-kpi build">
@@ -486,18 +478,18 @@
         <div class="lbl">🏗️ Build (Requisitos &amp; Rituais)<br>Sub-Rituals, Tech Solution, Training...</div>
       </div>
       <div class="bb-kpi other">
-        <div class="val">23.43h</div>
+        <div class="val">27.93h</div>
         <div class="lbl">⚙️ All Work / Outro<br>Overhead CI&amp;T, Value Activation, Tarefa</div>
       </div>
     </div>
 
     <!-- Barra empilhada squad -->
     <div class="bb-squad-bar">
-      <div class="label">Distribuição do time — 289.38h totais</div>
+      <div class="label">Distribuição do time — 375.48h totais</div>
       <div class="stacked">
-        <div class="seg seg-burn"  style="width:83.8%;">83.8% Burn</div>
-        <div class="seg seg-build" style="width:8.1%;">8.1%</div>
-        <div class="seg seg-other" style="width:8.1%;">8.1%</div>
+        <div class="seg seg-burn"  style="width:86.3%;">86.3% Burn</div>
+        <div class="seg seg-build" style="width:6.2%;">6.2%</div>
+        <div class="seg seg-other" style="width:7.4%;">7.4%</div>
       </div>
     </div>
 
@@ -517,112 +509,112 @@
       <tbody>
         <tr>
           <td><strong>Renan Gomes</strong></td>
-          <td class="r h-burn">43.25h</td>
+          <td class="r h-burn">60.42h</td>
           <td class="r h-build">20.25h</td>
           <td class="r h-other">0h</td>
           <td class="r h-other">0h</td>
-          <td class="r">63.50h</td>
+          <td class="r">80.67h</td>
           <td>
             <div class="mini-stacked">
-              <div class="seg-burn"  style="width:68.1%;"></div>
-              <div class="seg-build" style="width:31.9%;"></div>
+              <div class="seg-burn"  style="width:74.9%;"></div>
+              <div class="seg-build" style="width:25.1%;"></div>
             </div>
           </td>
-          <td>31.9% Build — refinamento e rituais</td>
+          <td>25.1% Build — maior contribuição em rituais</td>
         </tr>
         <tr>
           <td><strong>Guilherme Henrique</strong></td>
-          <td class="r h-burn">46.98h</td>
+          <td class="r h-burn">62.15h</td>
           <td class="r h-build">2.63h</td>
           <td class="r h-other">6.93h</td>
           <td class="r h-other">0h</td>
-          <td class="r">56.55h</td>
+          <td class="r">71.72h</td>
           <td>
             <div class="mini-stacked">
-              <div class="seg-burn"  style="width:83.1%;"></div>
-              <div class="seg-build" style="width:4.7%;"></div>
-              <div class="seg-other" style="width:12.2%;"></div>
+              <div class="seg-burn"  style="width:86.7%;"></div>
+              <div class="seg-build" style="width:3.7%;"></div>
+              <div class="seg-other" style="width:9.7%;"></div>
             </div>
           </td>
-          <td>12.3% All Work — Value Activation / deploy</td>
+          <td>9.7% All Work — Value Activation</td>
         </tr>
         <tr>
           <td><strong>Ederson Junior</strong></td>
-          <td class="r h-burn">42.92h</td>
+          <td class="r h-burn">59.92h</td>
           <td class="r h-build">0h</td>
           <td class="r h-other">0h</td>
-          <td class="r h-other">4.75h</td>
-          <td class="r">47.67h</td>
+          <td class="r h-other">5.75h</td>
+          <td class="r">65.67h</td>
           <td>
             <div class="mini-stacked">
-              <div class="seg-burn"  style="width:90.0%;"></div>
-              <div class="seg-other" style="width:10.0%;"></div>
+              <div class="seg-burn"  style="width:91.3%;"></div>
+              <div class="seg-other" style="width:8.8%;"></div>
             </div>
           </td>
-          <td>10% Outro — Tarefa / POC</td>
-        </tr>
-        <tr>
-          <td><strong>Arthur Henrique</strong></td>
-          <td class="r h-burn">42.50h</td>
-          <td class="r h-build">0h</td>
-          <td class="r h-other">1.50h</td>
-          <td class="r h-other">0h</td>
-          <td class="r">44.00h</td>
-          <td>
-            <div class="mini-stacked">
-              <div class="seg-burn"  style="width:96.6%;"></div>
-              <div class="seg-other" style="width:3.4%;"></div>
-            </div>
-          </td>
-          <td>Foco quase total em desenvolvimento</td>
+          <td>8.8% Outro — Tarefa / POC</td>
         </tr>
         <tr>
           <td><strong>Lucas Cunha</strong></td>
-          <td class="r h-burn">41.00h</td>
+          <td class="r h-burn">58.00h</td>
           <td class="r h-build">0.50h</td>
           <td class="r h-other">0h</td>
           <td class="r h-other">0h</td>
-          <td class="r">41.50h</td>
+          <td class="r">58.50h</td>
           <td>
             <div class="mini-stacked">
-              <div class="seg-burn"  style="width:98.8%;"></div>
-              <div class="seg-build" style="width:1.2%;"></div>
+              <div class="seg-burn"  style="width:99.1%;"></div>
+              <div class="seg-build" style="width:0.9%;"></div>
             </div>
           </td>
-          <td>Desenvolvimento puro</td>
+          <td>Desenvolvimento puro — 99.1% Burn</td>
         </tr>
         <tr>
           <td><strong>Alex Angelim</strong></td>
-          <td class="r h-burn">25.92h</td>
+          <td class="r h-burn">37.17h</td>
           <td class="r h-build">0h</td>
-          <td class="r h-other">10.25h</td>
+          <td class="r h-other">13.75h</td>
           <td class="r h-other">0h</td>
-          <td class="r">36.17h</td>
+          <td class="r">50.92h</td>
           <td>
             <div class="mini-stacked">
-              <div class="seg-burn"  style="width:71.7%;"></div>
-              <div class="seg-other" style="width:28.3%;"></div>
+              <div class="seg-burn"  style="width:73.0%;"></div>
+              <div class="seg-other" style="width:27.0%;"></div>
             </div>
           </td>
-          <td>28.3% All Work — Overhead CI&amp;T</td>
+          <td>27% All Work — Overhead CI&amp;T alto</td>
+        </tr>
+        <tr>
+          <td><strong>Arthur Henrique</strong></td>
+          <td class="r h-burn">46.50h</td>
+          <td class="r h-build">0h</td>
+          <td class="r h-other">1.50h</td>
+          <td class="r h-other">0h</td>
+          <td class="r">48.00h</td>
+          <td>
+            <div class="mini-stacked">
+              <div class="seg-burn"  style="width:96.9%;"></div>
+              <div class="seg-other" style="width:3.1%;"></div>
+            </div>
+          </td>
+          <td>Foco quase total em desenvolvimento</td>
         </tr>
       </tbody>
       <tfoot>
         <tr style="background:rgba(255,215,0,0.06); font-weight:700;">
           <td><strong>Squad</strong></td>
-          <td class="r h-burn">242.57h</td>
+          <td class="r h-burn">324.15h</td>
           <td class="r h-build">23.38h</td>
-          <td class="r h-other">18.68h</td>
-          <td class="r h-other">4.75h</td>
-          <td class="r">289.38h</td>
+          <td class="r h-other">22.18h</td>
+          <td class="r h-other">5.75h</td>
+          <td class="r">375.48h</td>
           <td>
             <div class="mini-stacked">
-              <div class="seg-burn"  style="width:83.8%;"></div>
-              <div class="seg-build" style="width:8.1%;"></div>
-              <div class="seg-other" style="width:8.1%;"></div>
+              <div class="seg-burn"  style="width:86.3%;"></div>
+              <div class="seg-build" style="width:6.2%;"></div>
+              <div class="seg-other" style="width:7.4%;"></div>
             </div>
           </td>
-          <td><span class="badge b-green">83.8% Burn</span></td>
+          <td><span class="badge b-green">86.3% Burn</span></td>
         </tr>
       </tfoot>
     </table>
@@ -642,7 +634,6 @@
       <div class="leg-i"><div class="leg-dot" style="background:rgba(230,126,34,0.55);"></div>Parcial (&lt;6h)</div>
       <div class="leg-i"><div class="leg-dot" style="background:rgba(241,196,15,0.40);"></div>Suspeito (8h exatas)</div>
       <div class="leg-i"><div class="leg-dot" style="background:rgba(192,57,43,0.55);"></div>Ausente</div>
-      <div class="leg-i"><div class="leg-dot" style="background:rgba(255,255,255,0.08);"></div>Futuro / sprint encerra 03/07</div>
     </div>
     <div class="heat-wrap">
       <table class="heat-tbl">
@@ -672,9 +663,9 @@
             <td class="c-parc">5.3h</td>
             <td class="c-parc">1.8h</td>
             <td class="c-parc">3.5h</td>
-            <td class="c-parc">3.0h</td>
-            <td class="c-aus">—</td>
-            <td class="c-future">—</td>
+            <td class="c-parc">5.8h</td>
+            <td class="c-ok">6.3h</td>
+            <td class="c-parc">5.8h</td>
           </tr>
           <!-- Arthur Henrique -->
           <tr>
@@ -686,9 +677,9 @@
             <td class="c-parc">5.0h</td>
             <td class="c-parc">4.0h</td>
             <td class="c-ok">7.0h</td>
-            <td class="c-parc">1.5h</td>
+            <td class="c-parc">2.5h</td>
             <td class="c-aus">—</td>
-            <td class="c-future">—</td>
+            <td class="c-parc">3.0h</td>
           </tr>
           <!-- Ederson Junior -->
           <tr>
@@ -697,12 +688,12 @@
             <td class="c-susp">8h⚠</td>
             <td class="c-ok">7.7h</td>
             <td class="c-parc">4.5h</td>
-            <td class="c-parc">2.8h</td>
+            <td class="c-parc">4.8h</td>
             <td class="c-parc">4.0h</td>
             <td class="c-ok">6.8h</td>
             <td class="c-parc">5.5h</td>
-            <td class="c-aus">—</td>
-            <td class="c-future">—</td>
+            <td class="c-ok">8.5h</td>
+            <td class="c-ok">7.5h</td>
           </tr>
           <!-- Guilherme Henrique -->
           <tr>
@@ -715,8 +706,8 @@
             <td class="c-aus">—</td>
             <td class="c-ok">10.0h</td>
             <td class="c-ok">9.5h</td>
-            <td class="c-aus">—</td>
-            <td class="c-future">—</td>
+            <td class="c-ok">7.7h</td>
+            <td class="c-ok">7.5h</td>
           </tr>
           <!-- Lucas Cunha -->
           <tr>
@@ -728,9 +719,9 @@
             <td class="c-parc">4.8h</td>
             <td class="c-ok">6.8h</td>
             <td class="c-ok">7.3h</td>
-            <td class="c-aus">—</td>
-            <td class="c-aus">—</td>
-            <td class="c-future">—</td>
+            <td class="c-parc">4.8h</td>
+            <td class="c-parc">3.8h</td>
+            <td class="c-ok">8.5h</td>
           </tr>
           <!-- Renan Gomes -->
           <tr>
@@ -743,8 +734,8 @@
             <td class="c-parc">5.5h</td>
             <td class="c-ok">6.7h</td>
             <td class="c-ok">9.0h</td>
-            <td class="c-parc">1.5h</td>
-            <td class="c-future">—</td>
+            <td class="c-ok">7.9h</td>
+            <td class="c-ok">10.8h</td>
           </tr>
         </tbody>
       </table>
@@ -757,59 +748,56 @@
     <div class="ins-grid">
 
       <div class="ins-card ok">
-        <div class="ins-title">⭐ Destaque Positivo</div>
+        <div class="ins-title">⭐ Destaque — Renan Gomes</div>
         <div class="ins-body">
-          <strong>Renan Gomes</strong> lidera com 63.5h e 68 worklogs (7.6/dia) —
-          melhor granularidade e consistência do time.<br><br>
-          <strong>Guilherme Henrique</strong> recuperou forte na segunda semana:
-          10h na terça e 9.5h na quarta após ausência na segunda (29/06).
+          <strong>Renan Gomes</strong> foi o único a atingir 100% da capacidade (80.67h),
+          com 88 worklogs em 10/10 dias — consistência exemplar.
+          Também liderou o Build do time, com 25.1% das horas em rituais e refinamento.
+        </div>
+      </div>
+
+      <div class="ins-card ok">
+        <div class="ins-title">📈 Recuperação — Guilherme Henrique</div>
+        <div class="ins-body">
+          Apesar da ausência em 29/06, <strong>Guilherme</strong> encerrou com 89.6% da
+          capacidade (71.72h), sustentado por dias fortes na 2ª semana:
+          10h na terça (30/06) e 9.45h na quarta (01/07).
         </div>
       </div>
 
       <div class="ins-card warn">
         <div class="ins-title">⚠️ Atenção — Alex Angelim</div>
         <div class="ins-body">
-          Presente em 8/10 dias, mas com apenas <strong>36.17h</strong> (45.2% da capacidade)
-          e média de apenas 4.5h/dia.
-          Além disso, <strong>28.3%</strong> das horas foram em Overhead CI&amp;T (processos internos).
-          Investigar se há contexto fora do projeto não registrado na Tempo.
+          Presente em 10/10 dias, mas com apenas <strong>50.92h</strong> (63.7% da capacidade)
+          e média de 5.1h/dia. <strong>27%</strong> das horas foram em Overhead CI&T.
+          Verificar se há projetos paralelos ou contexto fora do projeto Vivo.
         </div>
       </div>
 
       <div class="ins-card warn">
-        <div class="ins-title">🔍 Granularidade Baixa — Ederson Junior</div>
+        <div class="ins-title">🔍 Granularidade — Ederson Junior</div>
         <div class="ins-body">
-          <strong>22 worklogs em 8 dias</strong> = 2.75/dia — a menor do time.
-          1 dia com 8h exatas e valores muito variados (2.75h a 8.4h/dia)
-          sugerem lançamentos retroativos ou estimados em bloco.
-        </div>
-      </div>
-
-      <div class="ins-card info">
-        <div class="ins-title">📅 Sprint ainda não encerrou</div>
-        <div class="ins-body">
-          A sprint encerra em <strong>03/07 (amanhã)</strong>. Lucas, Arthur, Ederson e Alex
-          ainda não lançaram horas em 02/07 (hoje), e ninguém lançou em 03/07.
-          Com +1 dia, é possível que Guilherme e Renan se aproximem ou atinjam a meta de 80h.
+          <strong>25 worklogs em 10 dias</strong> = 2.5/dia — menor do time.
+          1 dia com 8h exatas e variação alta entre dias sugerem lançamentos retroativos.
+          O resultado final (82.1%) é positivo, mas a granularidade precisa melhorar.
         </div>
       </div>
 
       <div class="ins-card">
         <div class="ins-title">🔥 Composição: Burn forte no time</div>
         <div class="ins-body">
-          O time manteve <strong>83.8% das horas em desenvolvimento</strong> (Burn),
-          com Lucas (98.8%) e Arthur (96.6%) liderando o foco técnico.
-          Renan se destacou como principal contribuidor do Build (refinamentos e rituais — 31.9%).
+          <strong>86.3%</strong> das horas foram em desenvolvimento (Burn).
+          Lucas (99.1%) e Arthur (96.9%) lideraram o foco técnico.
+          Renan foi o principal contribuidor nos rituais (Build), com 20.25h.
         </div>
       </div>
 
-      <div class="ins-card">
-        <div class="ins-title">📊 Saúde Geral do Time</div>
+      <div class="ins-card info">
+        <div class="ins-title">📊 Saúde Geral — Sprint Encerrada</div>
         <div class="ins-body">
-          Nenhum dev atingiu ≥80% da capacidade ainda,
-          mas com 1 dia útil restante, <strong>Renan (79.4%)</strong> e possivelmente
-          <strong>Guilherme</strong> podem fechar próximos da meta.
-          Total: 289.39h de 480h possíveis = <strong>60.3%</strong>.
+          3 devs atingiram ≥80% da capacidade (Renan, Guilherme, Ederson).
+          3 devs ficaram abaixo (Lucas 73.1%, Alex 63.7%, Arthur 60%).
+          Total: <strong>375.48h de 480h = 78.2%</strong> da capacidade da sprint.
         </div>
       </div>
 
@@ -818,41 +806,45 @@
 
   <!-- ── AÇÕES SUGERIDAS ── -->
   <div class="section">
-    <div class="sec-title">🎯 Ações para Fechar a Sprint e a Próxima Iteração</div>
+    <div class="sec-title">🎯 Aprendizados para a Próxima Iteração</div>
     <ul class="act-list">
       <li>
-        <span class="act-icon">⏰</span>
-        <span><strong>Lançar horas de hoje (02/07) e amanhã (03/07):</strong>
-        Lucas, Arthur, Ederson e Alex ainda não lançaram hoje.
-        Fechar a sprint com os registros corretos é fundamental para o relatório final.</span>
+        <span class="act-icon">⭐</span>
+        <span><strong>Reconhecer Renan Gomes</strong> pela performance excepcional:
+        único a atingir 100% da capacidade, 88 worklogs, 10/10 dias presentes
+        e maior contribuição nos rituais do time. Modelo de referência para a squad.</span>
       </li>
       <li>
         <span class="act-icon">📌</span>
-        <span><strong>1:1 com Alex Angelim:</strong> 36.17h em 8 dias presentes é anomalamente baixo
-        (4.5h/dia vs 7-8h esperados). Além disso, 28.3% foram em Overhead CI&amp;T.
-        Verificar se há projetos paralelos, reuniões não rastreadas ou contexto não comunicado.</span>
+        <span><strong>1:1 com Alex Angelim:</strong> 50.92h em 10 dias presentes é abaixo do esperado
+        (média 5.1h/dia vs 7h de referência). Além disso, 27% foram em Overhead CI&T.
+        Clarificar se há projetos paralelos, demandas internas ou carga fora do projeto Vivo.</span>
       </li>
       <li>
         <span class="act-icon">🔍</span>
-        <span><strong>Granularidade — Ederson Junior:</strong> apenas 2.75 worklogs por dia.
+        <span><strong>Granularidade — Ederson Junior e Arthur Henrique:</strong>
+        2.5 e 4.1 worklogs/dia respectivamente — abaixo da referência.
         Incentivar lançamentos no momento da atividade, em subtarefas específicas,
-        evitando blocos retroativos que resultam em 8h exatas suspeitos.</span>
+        para evitar blocos retroativos e valores de 8h exatas.</span>
       </li>
       <li>
         <span class="act-icon">📅</span>
-        <span><strong>Ausência de Guilherme em 29/06 e 02/07:</strong> clarificar se houve feriado,
-        atestado ou falta de lançamento. Caso tenha trabalhado, lançar retroativamente antes do fechamento.</span>
-      </li>
-      <li>
-        <span class="act-icon">⭐</span>
-        <span><strong>Reconhecer Renan Gomes</strong> pela consistência exemplar:
-        68 worklogs, 9/10 dias, maior granularidade do time e liderança tanto em Burn quanto em Build (rituais).</span>
+        <span><strong>Ausências não justificadas:</strong> Arthur sem registro em 02/07,
+        Guilherme em 29/06. Na próxima sprint, comunicar ausências ou feriados
+        no canal do time para que o relatório reflita a realidade.</span>
       </li>
       <li>
         <span class="act-icon">📋</span>
-        <span><strong>Hábito para a próxima sprint:</strong> lançar no mesmo dia, nas subtarefas corretas.
-        Lançamentos de 8h exatas (Arthur 2×, Renan 2×, Ederson 1×) são sinal de estimativa —
-        a granularidade em tempo real reflete melhor o esforço real do time.</span>
+        <span><strong>Meta de capacidade:</strong> apenas 3 de 6 devs atingiram ≥80%.
+        Para a Iteração 5, reforçar o hábito de lançar no mesmo dia e nas subtarefas corretas.
+        Lançamentos de 8h exatas (Renan 2×, Arthur 2×, Ederson 1×) indicam estimativa —
+        granularidade real reflete melhor o esforço do time.</span>
+      </li>
+      <li>
+        <span class="act-icon">🔥</span>
+        <span><strong>Burn de 86.3% é saudável</strong> — sinal de foco em desenvolvimento.
+        Manter esse equilíbrio na próxima sprint, preservando espaço para Build
+        (rituais, refinamento) sem sobrecarregar apenas um dev (Renan acumulou 25% de Build sozinho).</span>
       </li>
     </ul>
   </div>
@@ -863,7 +855,7 @@
 <div class="footer">
   ⚽ Squad Lyra &nbsp;|&nbsp; Hub de Pagamentos Vivo &nbsp;|&nbsp; PI Plan 2 — Iteração 4<br>
   <span style="margin-top:5px;display:inline-block;">
-    Copa do Mundo 2026 Edition &nbsp;·&nbsp; Dados: Tempo API (22/06 a 02/07/2026) &nbsp;·&nbsp; Gerado em 02/07/2026
+    Copa do Mundo 2026 Edition &nbsp;·&nbsp; Dados: Tempo API (22/06 a 03/07/2026) &nbsp;·&nbsp; Gerado em 07/07/2026
   </span>
 </div>
 
